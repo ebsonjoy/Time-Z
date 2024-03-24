@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/static/assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/static/assets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <h1 class="brand-wrap">TimeZ</h1>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item">
+                    <a class="menu-link" href="/dashboard"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/products"> <i class="icon material-icons md-shopping_bag"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/category"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Category</span>
+                    </a>
+                   
+                </li>
+              
+              
+                <li class="menu-item">
+                    <a class="menu-link" href="/customer"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Customer</span>
+                    </a>
+                    
+                </li>
+                <li class="menu-item active">
+                    <a class="menu-link" href="/adminOrderProfile"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="/coupon"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text">Coupons</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <header class="main-header navbar justify-content-end">
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">   
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+                    </li>
+                    <li class="dropdown nav-item">
+                            <a class="dropdown-item text-danger" href="/adminLogout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order detail</h2>
+                    <p>Details for Order ID: <%= orderItem.trackingId %></p> <!-- Render order trackingId dynamically -->
+                </div>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i> <b><%= new Date(orderItem.orderDate).toLocaleString() %></b> <!-- Render orderDate dynamically -->
+                            </span> <br>
+                            <small class="text-muted">Order ID: <%= orderItem.trackingId %></small> <!-- Render order trackingId dynamically -->
+                        </div>
+                        
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="row mb-50 mt-20 order-info-wrap">
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-person"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Customer</h6>
+                                    <p class="mb-1">
+                                        <%= orderItem.billingDetails.name %> <br> <%= orderItem.billingDetails.email %> <br> <%= orderItem.billingDetails.phone %>
+                                    </p>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-local_shipping"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Order info</h6>
+                                    <p class="mb-1">
+                                        Pay method: <%= orderItem.paymentStatus %>
+                                    </p>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-place"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Deliver to</h6>
+                                    <p class="mb-1">
+                                        City: <%= orderItem.billingDetails.city %>, <%= orderItem.billingDetails.country %> <br> <%= orderItem.billingDetails.address %> <br> <%= orderItem.billingDetails.zip %>
+                                    </p>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                    </div> <!-- row // -->
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="40%">Product</th>
+                                            <th width="10%">Unit Price</th>
+                                            <th width="10%">Quantity</th>
+                                            <th width="10%">Order Status</th>
+                                            <th width="10%" class="text-end">Total</th>
+                                            <th width="40%" class="text-end">Actions</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% orderItem.items.forEach(item => { %>
+                                            <tr>
+                                                <td>
+                                                    <a class="itemside" href="#">
+                                                        <div class="left">
+                                                            <img src="/static/products/<%= item.product.images[0] %>" width="40" height="40" class="img-xs" alt="Item"> <!-- Render product image dynamically -->
+                                                        </div>
+                                                        <div class="info"> <%= item.product.product %> </div> <!-- Render product name dynamically -->
+                                                    </a>
+                                                </td>
+                                                <td> ₹<%= item.price %> </td>
+                                                <td> <%= item.quantity %> </td>
+                                                <td><span class="badge rounded-pill 
+                                                    <%= item.orderStatus === 'Shipped' ? 'bg-success' :
+                                                        item.orderStatus === 'Cancelled' ? 'bg-danger' :
+                                                        item.orderStatus === 'Return' ? 'bg-primary' :
+                                                        item.orderStatus === 'Delivered' ? 'bg-success' :
+                                                        item.orderStatus === 'Pending' ? 'bg-info' : '' %>">
+                                                    <%= item.orderStatus %>
+                                                  </span></td>
+                                                <td class="text-end"> ₹<%= item.price * item.quantity %> </td>
+                                                <td>
+                                                    <div class="col-lg-12 col-md-12 ms-auto text-md-end">
+                                                        <select id="statusSelect" class="form-select d-inline-block mb-lg-0 mb-15 mw-200" name="newStatus" onchange="updateOrderStatus('<%= item._id%>','<%= orderItem._id %>')">
+                                                            <option>Change status</option>
+                                                            <option value="Pending" <%= item.orderStatus === "Pending" ? "selected" : '' %>>Processing Order</option>
+                                                            <option value="Shipped" <%= item.orderStatus === "Shipped" ? "selected" : '' %>>Shipped</option>
+                                                            <option value="Delivered" <%= item.orderStatus === "Delivered" ? "selected" : '' %>>Delivered</option>
+                                                            <option value="Cancelled" <%= item.orderStatus === "Cancelled" ? "selected" : '' %>>Cancelled</option>
+                                                        </select>
+                                                        <!-- Your code for status change dropdown and buttons goes here -->
+                                                    </div>
+                                                    
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div> <!-- table-responsive// -->
+                            
+                        </div> <!-- col// -->
+                    
+                        <div class="col-lg-3">
+                            <div class="box shadow-sm bg-light">
+                                <h6 class="mb-15">Payment info</h6>
+                                <p><%= orderItem.paymentMethod  %></p>
+                            </div>
+                           
+                        </div>
+                        <!-- Add code for payment info display here -->
+                    </div>
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section>
+        
+
+        <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+<!-- change order Status -->
+
+<script>
+    function updateOrderStatus(productId,orderId) {
+    const newStatus = document.getElementById("statusSelect").value;
+    console.log(newStatus);
+    fetch('/update_order_status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ productId,orderId, newStatus })
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        // Handle success response (if needed)
+        Swal.fire({
+            title: 'Success!',
+            text: data.message,
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    })
+    .catch(error => {
+        // Handle error
+        console.error('Error updating order status:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Failed to update order status',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script src="/static/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/static/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/static/assets/js/vendors/select2.min.js"></script>
+    <script src="/static/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/static/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="/static/assets/js/vendors/chart.js"></script>
+    <!-- Main Script -->
+    <script src="/static/assets/js/main.js" type="text/javascript"></script>
+    <script src="/static/assets/js/custom-chart.js" type="text/javascript"></script>
+</body>
+
+</html>
