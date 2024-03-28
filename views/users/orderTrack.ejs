@@ -19,11 +19,58 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="/static/User_assets/css/main.css?v=3.4" />
 
-
+    <style>
+      .others {
+          background-color: #f9f9f9;
+          padding: 10px;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          margin-bottom: 20px;
+      }
+      .others p {
+          margin: 5px 0;
+          font-size: 16px;
+          color: #333;
+      }
+      .delivery-charge {
+          color: #e74c3c; /* Red */
+      }
+      .discount {
+          color: #27ae60; /* Green */
+      }
+  </style>
 
 
     <style>
 
+      
+/* invoice */
+.incontainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#invoiceButton {
+  background-color: #088178; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+#invoiceButton:hover {
+  background-color: #012e2b; /* Darker Green */
+}
+
+/* end */
 .pending {
     background-color: #157501; 
 }
@@ -777,8 +824,9 @@
                                                         <th>Product Name</th>
                                                         <th>Price</th>
                                                         <th>Quantity</th>
+                                                       
                                                         <th>Total</th>
-                                                        <th>Cancel</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -826,8 +874,19 @@
                                                     <% }) %>
                                                 </tbody>
                                             </table>
+                                            <div class="others">
+                                              <p>Delivery Charge: <span class="delivery-charge">₹ +60</span></p>
+                                              <% if (orderItem.couponDiscount>0) { %>
+                                                <p>Discount: <span class="discount">₹ -  <%=  orderItem.couponDiscount %></span></p>
+                                              <% }else {%>
+                                              <p>Discount: <span class="discount" style="color: #e74c3c;"> No coupon applied </span></p>
+                                              <% } %>
+                                          </div>
+                                            <div class="incontainer">
+                                              <p>Total Price: ₹<span id="totalPrice"><%= orderItem.totalPrice %></span></p>
+                                              <button id="invoiceButton"  onclick="getOrderInvoice('<%= orderItem._id %>')" >Download Invoice</button>
+                                            </div>
                                             
-                                              <p>Total Price: ₹<%= orderItem.totalPrice %></p>
                                           </div>
                                       </div>
                                   </div>
@@ -1067,6 +1126,62 @@
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- invoice download -->
+
+<script>
+  function getOrderInvoice(orderId) {
+    console.log(orderId);
+    window.location.href = "/Invoice/"+orderId
+  }
+</script>
+
+<!-- <script>
+  function getOrderInvoice(orderId) {
+    Swal.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#14A44D",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/getOrderInvoice', {
+                method: "PATCH",
+                headers: { 'Content-Type': 'application/json' },
+                body:JSON.stringify({orderId})
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Something went wrong!');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    Swal.fire({
+                        title: "Cancelled!",
+                        text: "Your order has been cancelled.",
+                        icon: "success",
+                        showConfirmButton:false
+                    });
+                    setTimeout(() => {
+                        location.reload()
+                    }, 2000);
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: error.message || "Something went wrong!",
+                    });
+                });
+        }
+    });
+}
+</script> -->
+
+
+    <!-- end -->
 
     <script>
       function orderTrackCancelOrder(productId,orderId) {

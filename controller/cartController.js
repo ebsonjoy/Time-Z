@@ -5,7 +5,8 @@ const products = require('../models/products');
 const Address = require('../models/address');
 const Cart = require('../models/cart');
 const Order = require('../models/order');
-const Coupon = require('../models/coupon')
+const Coupon = require('../models/coupon');
+
 
 
 
@@ -58,16 +59,45 @@ addTocart:async(req,res)=>{
 },
 checkOut: async(req,res)=>{
 
-    
+    const itemId = req.query.itemId; 
     const userId = req.session.userID
-    const data = await User.findById(userId)
+
+    if (itemId) {
+        const order = await Order.findById(itemId).populate({
+            path: "items.product",
+            message: "product"
+        });
+        const address = await Address.findOne({ userId: userId });
+        const data = await User.findById(userId);
+        const cartTotalPrice = order.totalPrice;
+        
+        const validCoupons = await Coupon.find({
+            expiryDate: { $gt: new Date() }, 
+            minimumAmount: { $lt: cartTotalPrice }, 
+            userID: { $ne: userId },
+            isListed: true 
+        });
+    
+        res.render("users/checkOut", {
+            userId: userId,
+            data: data,
+            cart: order, 
+            user: req.session.user,
+            address: address,
+            coupons: validCoupons,
+        });
+
+
+    } else {
+        const data = await User.findById(userId)
     const address = await Address.findOne({ userId: userId });
     // const coupons = await Coupon.find({ isListed: true });
 
-    const userCart = await Cart.find({userId:userId}).populate({
+    const userCart = await Cart.findOne({userId:userId}).populate({
         path:"items.product",
         message:"product"
     })
+    
     const userCarts = await Cart.findOne({ userId });
     
     const cartTotalPrice = userCarts.totalPrice
@@ -87,6 +117,11 @@ checkOut: async(req,res)=>{
          address:address,
          coupons:validCoupons,
         })
+    }
+
+
+    
+   
 },
 updateQuantity : async (req, res) => {
     try {
@@ -172,91 +207,99 @@ deleteCartProduct: async (req, res) => {
         res.json({ message: err.message });
     }
 },
-orderPost: async (req, res) => {
+orderPost:async (req, res) => {
+    const orderId = req.body.orderId;
     
     try {
-       
-        const userId = req.session.userID;
-        const { addressId, totalPrice } = req.body;
+        const findOrder = await Order.findOne({ _id: orderId });
 
-       
-
-        if (!addressId) {
-            return res.status(400).json({ error: 'Please select an address' });
-        }
-
-        let userOrder = await Order.findOne({ userId });
-
-        if (!userOrder) {
-            userOrder = new Order({ userId, addressId, totalPrice });
+        if (findOrder) {
+            const updatedOrder = await Order.findByIdAndUpdate(orderId, { paymentStatus: "Paid" }, { new: true });
+            
         } else {
-            userOrder.totalPrice = totalPrice;
-        }
+            const userId = req.session.userID;
+            const { addressId, totalPrice } = req.body;
 
-     
-
-        const userCart = await Cart.findOne({ userId }).populate('items.product');
-        const user = await User.findById(userId);
-        const address = await Address.findOne({ userId });
-        const selectedAddress = address.addressDetails.find(a => addressId.includes(a._id.toString()));
-
-        if (selectedAddress) {
-            const orderItems = userCart.items.map(item => ({
-                product: item.product._id,
-                price: item.product.price,
-                quantity: item.quantity
-            }))
-
-            const order = new Order({
-                userId,
-                totalPrice,
-                billingDetails: {
-                    name: user.name,
-                    email: user.email,
-                    phone: user.phone,
-                    address: selectedAddress.address,
-                    street: selectedAddress.street,
-                    city: selectedAddress.city,
-                    state: selectedAddress.state,
-                    zip: selectedAddress.zip,
-                    country: selectedAddress.country
-                },
-                items: orderItems,
-                paymentStatus:req.body.paymentStatus,
-                paymentMethod:req.body.paymentMethod,
-            });
-
-            await order.save();
-
-            await Cart.findOneAndUpdate(
-                { userId: user._id },
-                { $set: { items: [], totalPrice: 0 } }
-            );
-
-            for(const item of order.items){
-                await products.findByIdAndUpdate(
-                    item.product,
-                    {
-                        $inc: {
-                            stock: -item.quantity
-                        }
-                    },
-                    {
-                        new: true
-                    }
-                )
+            if (!addressId) {
+                return res.status(400).json({ alert: 'Please select an address' });
             }
 
+            let userOrder = await Order.findOne({ userId });
 
+            if (!userOrder) {
+                userOrder = new Order({ userId, addressId, totalPrice });
+            } else {
+                userOrder.totalPrice = totalPrice;
+            }
 
-        } else {
-            return res.status(400).json({ error: 'Please select a valid address' });
+            const userCart = await Cart.findOne({ userId }).populate('items.product');
+            const user = await User.findById(userId);
+            const address = await Address.findOne({ userId });
+            const selectedAddress = address.addressDetails.find(a => addressId.includes(a._id.toString()));
+
+            if (selectedAddress) {
+                const orderItems = userCart.items.map(item => ({
+                    product: item.product._id,
+                    price: item.product.price,
+                    quantity: item.quantity
+                }));
+
+                const order = new Order({
+                    userId,
+                    totalPrice,
+                    billingDetails: {
+                        name: user.name,
+                        email: user.email,
+                        phone: user.phone,
+                        address: selectedAddress.address,
+                        street: selectedAddress.street,
+                        city: selectedAddress.city,
+                        state: selectedAddress.state,
+                        zip: selectedAddress.zip,
+                        country: selectedAddress.country
+                    },
+                    items: orderItems,
+                    paymentStatus: req.body.paymentStatus,
+                    paymentMethod: req.body.paymentMethod,
+                    couponDiscount: req.body.couponDiscount,
+                });
+
+                await order.save();
+
+                await Cart.findOneAndUpdate(
+                    { userId: user._id },
+                    { $set: { items: [], totalPrice: 0 } }
+                );
+
+                for (const item of order.items) {
+                    await products.findByIdAndUpdate(
+                        item.product,
+                        { $inc: { stock: -item.quantity } },
+                        { new: true }
+                    );
+                }
+
+                if (req.body.couponDiscount > 0) {
+                    
+                    const coupon = await Coupon.findOne({ coupon_code: req.body.couponCode });
+        
+                    if (coupon) {
+                        
+                        coupon.userID.push(req.session.userID);
+                        await coupon.save();
+                    }
+                }
+
+            } else {
+                return res.status(400).json({ error: 'Please select a valid address' });
+            }
         }
 
         res.redirect('/orderConform');
+
     } catch (err) {
         console.error("Error placing order:", err);
-        res.status(500).json({ error: 'Internal server errorrr' });
+        res.status(500).json({ error: 'Internal server error' });
     }
 },
 orderConform:(req,res)=>{
@@ -279,10 +322,10 @@ checkCoupon :async (req, res) => {
 
         const amountDividedBYPercentage = Math.ceil(totalAmount*coupon.percentage/100)
     if(amountDividedBYPercentage > coupon.maximumAmount ){
-        const amountToPay = totalAmount - coupon.maximumAmount
+        const amountToPay = (totalAmount - coupon.maximumAmount) + 60
         res.json({totalAmount:amountToPay,couponId:couponCode,discountAmount:coupon.maximumAmount,couponCode:coupon.coupon_code})   
     }else{
-        const amountToPay = totalAmount-amountDividedBYPercentage
+        const amountToPay = (totalAmount-amountDividedBYPercentage) +60
         res.json({totalAmount:amountToPay,couponId:couponCode,discountAmount:amountDividedBYPercentage,couponCode:couponCode.coupon_code})
     }
 

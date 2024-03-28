@@ -26,6 +26,59 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="/static/User_assets/css/main.css?v=3.4" />
 
+
+    <!-- coupons -->
+    <style>
+      .bodyy {
+          font-family: Arial, sans-serif;
+          /* margin: 0;
+          padding: 0;
+          background-color: #f2f2f2; */
+      }
+      .coupon-container {
+          /* max-width: 800px;
+          margin: 20px auto; */
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          /* justify-content: space-between; */
+      }
+      .coupon-box {
+          flex: 0 0 calc(33.3333% - 10px);
+          background-color: #fff;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          padding: 10px;
+          margin-bottom: 20px;
+          border: 1px dashed #ccc;
+      }
+      .coupon-title {
+          font-size: 16px;
+          font-weight: bold;
+          text-align: center;
+          margin-bottom: 5px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+      }
+      .coupon-details {
+          text-align: center;
+          font-size: 14px;
+          color: #555;
+          line-height: 1.5;
+      }
+      .coupon-detail {
+          display: inline-block;
+          padding: 0 5px;
+      }
+      .coupon-detail:not(:last-child) {
+          border-right: 1px solid #ccc;
+      }
+      .coupon-detail-value {
+          color: #333;
+      }
+  </style>
+
     <!-- Style the checkbox container  -->
 
     <style>
@@ -871,10 +924,9 @@
                                             <div class="address-box" id="address<%= index + 1 %>">
                                                 <label>
                                                   <div class="radio-box" style="display: inline-block; vertical-align: middle;">
-                                                    <input style="margin: 3px 10px 0px 0px; vertical-align: middle;" type="radio" name="addressId" value="<%= address._id %>">
+                                                    <input style="margin: 3px 10px 0px 0px; vertical-align: middle;" type="radio" name="addressId" value="<%= address._id %>" checked>
                                                     <h3 style="display: inline-block; margin: 0px; vertical-align: middle;" onclick="toggleAddressDetails('<%= index + 1 %>', '<%= address._id %>')">Address <%= index + 1 %></h3>
                                                 </div>
-                                                
                                                 </label>
                                                 <div class="address-details" style="display: none;">
                                                     <input type="hidden" name="id" value="<%= address._id %>">
@@ -893,19 +945,49 @@
                               </div>
                           </div>
 
-                          <div class="col-lg-12">
-                            <div class="toggle_info">
-                                <span><i class="fi-rs-label mr-10"></i><span class="text-muted">Coupon Actions</span> <a href="#couponActions" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Click here to manage your coupon</a></span>
+                          
+
+
+
+
+
+
+                          <div class="bodyy">
+                            <div class="coupon-container">
+                              <% if (coupons.length === 0) { %>
+                                <p>You have no coupons available. Purchase above 2000 rupees to qualify for a coupon!</p>
+                            <% } else { %>
+                              <% coupons.forEach(function(coupon) { %>
+                                <div class="coupon-box">
+                                 
+                                    <div class="coupon-title">Coupon:<%= coupon.coupon_code %></div>
+                                    <div class="coupon-details">
+                                        <span class="coupon-detail coupon-detail-label"><%= coupon.description %></span>
+                                        <!-- <span class="coupon-detail coupon-detail-value">20% off</span> -->
+                                    </div>
+                                   
+                                </div>
+                                <% }); %>
+                                <% } %>  
                             </div>
-                            <div class="panel-collapse collapse coupon_form " id="couponActions">
+                            </div>
+
+                          <div class="col-lg-12">
+                            <!-- <div class="toggle_info">
+                                <span><i class="fi-rs-label mr-10"></i><span class="text-muted"></span> <a href="#couponActions" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Click here to apply your coupon</a></span>
+                                <button class="buttons" id="openModal">Coupons</button><br>
+
+
+                            </div> -->
+                            <div>
                                 <div class="panel-body">
-                                    <p class="mb-30 font-sm">Manage your coupon below.</p>
+                                    <!-- <p class="mb-30 font-sm">Manage your coupon below.</p> -->
                                     <div class="form-group">
-                                        <input type="text" id="couponCode" placeholder="Enter Coupon Code...">
+                                        <input type="text" id="couponCode" name="couponCode" placeholder="Enter Coupon Code...">
                                     </div>
                                     <div class="form-group">
                                         <button class="btn btn-md" id="applyCouponBtn">Apply Coupon</button>
-                                        <button class="btn btn-md" id="cancelCouponBtn">Cancel Coupon</button>
+                                        <!-- <button class="btn btn-md" id="cancelCouponBtn">Cancel Coupon</button> -->
                                         <!-- <button onclick="reloadPageSilently()">Reload Page Silently</button> -->
             
                                     </div>
@@ -937,47 +1019,54 @@
                                               <th>Total</th>
                                           </tr>
                                       </thead>
+                                      <!-- 999999 -->
                                       <tbody>
-                                          <% cart.forEach(carts => { %>
-                                              <% carts.items.forEach(cart => { %>
+                                          
+                                              <% cart.items.forEach(carts => { %>
                                                   <tr>
-                                                      <td class="image product-thumbnail"><img src="static/products/<%= cart.product.images[0]%>" alt="#"> </td>
+                                                      <td class="image product-thumbnail"><img src="static/products/<%= carts.product.images[0]%>" alt="#"> </td>
                                                       <td>
-                                                          <h5><%= cart.product.product  %></a></h5> <span class="product-qty">x <%= cart.quantity %></span>
+                                                          <h5><%= carts.product.product  %></a></h5> <span class="product-qty">x <%= carts.quantity %></span>
                                                       </td>
-                                                      <td>₹<%= cart.price * cart.quantity %></td>
+                                                      <td>₹<%= carts.price * carts.quantity %></td>
                                                   </tr>
                                               <% }) %>
                                               
                                               <tr>
                                                   <th>SubTotal</th>
-                                                  <td class="product-subtotal" colspan="2">₹<%=carts.totalPrice%></td>
+                                                  <td class="product-subtotal" colspan="2">₹<%=cart.totalPrice%></td>
                                               </tr>
                                               <tr>
                                                   <th>Shipping</th>
-                                                  <td colspan="2"><em>Free Shipping
+                                                  <td colspan="2"><em>₹ 60
                                                   </em></td>
                                               </tr>
+                                              <tr>
+                                                <th>Discount</th>
+                                                <td colspan="2"><em> ₹<span style="color: #45a049;"  id="couponId" ><%= cart.couponDiscount%></span>
+                                                  <input type="hidden" name="couponDiscount" id="discountId" value="<%= cart.couponDiscount%>">
+
+                                                </em></td>
+                                            </tr>
                                              
                                               <tr>
                                                   <th>Total</th>
                                                   <td colspan="2" class="product-subtotal">
                                                     <span class="font-xl text-brand fw-900">Rs :</span>
-                                                    <span id="subtotal" class="font-xl text-brand fw-900"><%= carts.totalPrice %></span>
-                                                    <input type="hidden" name="totalPrice" id="totalPriceInput" value="<%= carts.totalPrice %>">
+                                                    <span id="subtotal" class="font-xl text-brand fw-900"><%= cart.totalPrice + 60%></span>
+                                                    <input type="hidden" name="totalPrice" id="totalPriceInput" value="<%= cart.totalPrice + 60 %>">
                                                 </td>
-                                                <input type="hidden" id="couponId">
+                                                <!-- <input type="hidden" id="couponId"> -->
                                                 
                                               </tr>
-                                          <% }) %>
+                                          
                                       </tbody>
                                   </table>
                               </div>
 
                               <div>
-                          <button class="buttons" id="openModal">Show Coupons</button><br>
                               </div>
-                              <divclass="text-end d-flex justify-content-between" id="couponDetails"></div>
+                              <div class= "text-end d-flex justify-content-between" id="couponDetails"></div>
                               
                               <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                               <div class="payment_method">
@@ -1012,12 +1101,14 @@
                                         Please select a payment method before placing the order.
                                     </div>
                                 </div>
+                                <input type="hidden" name="orderId" value="<%= cart._id%>">
                                 <input type="hidden" id="paymentStatus" name="paymentStatus">
                                 <button type="submit" class="btn btn-primary">Place Order</button>
                             </div>
                           </div>
                         </div>
 
+                        
 
               </form>
               <div id="couponModal" class="modal">
@@ -1423,8 +1514,13 @@
       handler: function (response) {
         console.log(response);
      
-          console.log("Payment successful");
-          document.getElementById('paymentStatus').value = 'Paid';
+        if (response.razorpay_payment_id) {
+            console.log("Payment successful");
+            document.getElementById('paymentStatus').value = 'Paid';
+          } else {
+            console.log("Payment failed or canceled");
+            document.getElementById('paymentStatus').value = 'Failed';
+          }
         
         submitForm();
       },
@@ -1441,11 +1537,11 @@
 
     var rzp = new Razorpay(options);
 
-    // rzp.on('payment.failed', function (response) {
-    //   console.log("Payment failed:", response);
-    //   document.getElementById('paymentStatus').value = 'Failed';
-    //   submitForm();
-    // });
+    rzp.on('payment.failed', function (response) {
+      console.log("Payment failed:", response);
+      document.getElementById('paymentStatus').value = 'Failed';
+      submitForm();
+    });
 
     rzp.open();
   }
@@ -1579,7 +1675,7 @@
     });
     const data = await response.json();
     const newTotalPrice = data.totalAmount.toFixed(2);
-        document.getElementById('subtotal').innerText = newTotalPrice;
+        document.getElementById('subtotal').innerText = newTotalPrice ;
         document.getElementById('totalPriceInput').value = newTotalPrice;
 
     // subtotal.className = 'text-success';
@@ -1592,7 +1688,9 @@
 cancel
 </span>
     `;
-    document.getElementById('couponId').innerText = data.couponId;
+    document.getElementById('couponId').innerText = data.discountAmount;
+    document.getElementById('discountId').value = data.discountAmount;
+
   } catch (error) {
     console.error(error);
   }
@@ -1604,7 +1702,7 @@ async function removeCoupon(params) {
 </script>
 
 
-<script>
+<!-- <script>
   document.getElementById("openModal").addEventListener("click", function() {
     document.getElementById("couponModal").style.display = "block";
   });
@@ -1622,28 +1720,28 @@ async function removeCoupon(params) {
     if (cancelCouponBtn) {
         cancelCouponBtn.addEventListener('click', cancelCoupon);
     }
-});
+}); -->
 
-function cancelCoupon() {
-    fetch('/cancel-coupon', {
-        method: 'POST'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to cancel coupon');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Coupon canceled successfully');
-        const originalTotalPrice = data.originalTotalPrice.toFixed(2);
-        document.getElementById('subtotal').innerText =  originalTotalPrice; // Update the displayed total price
-        document.getElementById('totalPriceInput').value = originalTotalPrice;
-    })
-    .catch(error => {
-        console.error('Error canceling coupon:', error);
-    });
-}
+// function cancelCoupon() {
+//     fetch('/cancel-coupon', {
+//         method: 'POST'
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Failed to cancel coupon');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         console.log('Coupon canceled successfully');
+//         const originalTotalPrice = data.originalTotalPrice.toFixed(2);
+//         document.getElementById('subtotal').innerText =  originalTotalPrice; // Update the displayed total price
+//         document.getElementById('totalPriceInput').value = originalTotalPrice;
+//     })
+//     .catch(error => {
+//         console.error('Error canceling coupon:', error);
+//     });
+// }
   </script>
 
 <!-- <script>

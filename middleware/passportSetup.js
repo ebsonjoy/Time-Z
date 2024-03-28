@@ -58,7 +58,7 @@ const authController = {
         if (err) {
           return next(err);
         }
-        req.session.userID = user._id; // Assuming your user model uses "_id" as the ID field
+        req.session.userID = user._id;
         return res.redirect('/');
       });
     })(req, res, next);

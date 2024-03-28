@@ -54,6 +54,7 @@ router.get('/orderTrack/:id',userController.orderTrack)
 // router.get('/returnOrder/:id', userController.returnOrder);
 router.patch('/orderTrackCancelOrder',userController.orderTrackCancelOrder)
 router.patch('/orderTrackReturnOrder',userController.orderTrackReturnOrder)
+// router.get('/orderRetry/:orderId',userController.orderRetryToCheckOut)
 
 
 
@@ -73,6 +74,8 @@ router.get("/shopCart",cartController.shopCart)
 router.get("/addTocart/:id",cartController.addTocart)
 
 // checkOut
+// router.get("/checkOut",cartController.checkOut)
+// Retry Orders && checkOut
 router.get("/checkOut",cartController.checkOut)
 router.post('/updateQuantity',cartController.updateQuantity)
 router.get("/deleteCartProduct/:id",cartController.deleteCartProduct)
@@ -108,6 +111,9 @@ router.get('/check-wallet-balance', walletController.checkWalletBalance);
 // Coupon
 router.patch('/checkCoupon', cartController.checkCoupon);
 router.post('/cancel-coupon', cartController.cancelCoupon);
+
+// Invoice
+router.get('/Invoice/:orderId',userController.getOrderInvoice)
 
 
 

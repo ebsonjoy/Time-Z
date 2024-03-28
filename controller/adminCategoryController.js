@@ -19,7 +19,7 @@ const adminCategoryController = {
     adminNewCategory: async (req,res)=>{
         const existingcategory = await Category.findOne({category: req.body.category});
         if(existingcategory){
-             res.render('users/addcategory',{title:"SignUP", alert:"Email already exists, Please try with another one",});
+             res.render('admin/addcategory',{alert:"Category is already exists, Please try with another one",});
         }else{
            
             const newcategory = new Category({

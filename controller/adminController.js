@@ -40,35 +40,35 @@ const adminController={
         }
        
     },
-    adminDashboard: async (req, res) => {
-        if (!req.session.admin) {
-            res.render("admin/login");
-        } else {
-            try {
-                const ordersCount = await Order.countDocuments({});
-                const customers = await User.countDocuments({});
-                const productsCount = await Products.countDocuments({})
+    // adminDashboard: async (req, res) => {
+    //     if (!req.session.admin) {
+    //         res.render("admin/login");
+    //     } else {
+    //         try {
+    //             const ordersCount = await Order.countDocuments({});
+    //             const customers = await User.countDocuments({});
+    //             const productsCount = await Products.countDocuments({})
 
                 
-                const Revenue = await Order.aggregate([
-                    {
-                        $group: {
-                            _id: null,
-                            totalAmount: { $sum: "$totalPrice" }
-                        }
-                    }
-                ]);
+    //             const Revenue = await Order.aggregate([
+    //                 {
+    //                     $group: {
+    //                         _id: null,
+    //                         totalAmount: { $sum: "$totalPrice" }
+    //                     }
+    //                 }
+    //             ]);
     
-                // Extracting total revenue from the aggregation result
-                const totalRevenue = Revenue.length > 0 ? Revenue[0].totalAmount : 0;
+    //             // Extracting total revenue from the aggregation result
+    //             const totalRevenue = Revenue.length > 0 ? Revenue[0].totalAmount : 0;
     
-                res.render('admin/dashboard', { ordersCount, totalRevenue,customers,productsCount });
-            } catch (error) {
-                console.error("Error:", error);
-                res.status(500).send("Internal Server Error");
-            }
-        }
-    },
+    //             res.render('admin/dashboard', { ordersCount, totalRevenue,customers,productsCount });
+    //         } catch (error) {
+    //             console.error("Error:", error);
+    //             res.status(500).send("Internal Server Error");
+    //         }
+    //     }
+    // },
     adminLogout:(req,res)=>{
         if(req.session.admin){
             req.session.admin = null;
@@ -91,12 +91,36 @@ const adminController={
         try {
             const { startDate, endDate } = req.body;
       
-            // Fetch orders from the database based on the provided date range
-            const orders = await Order.find({
-                orderDate: { $gte: new Date(startDate), $lte: new Date(endDate) }
-            }).populate('items.product');
+            
+            const orders = await Order.aggregate([
+                { $match: { 
+                    orderDate: { $gte: new Date(startDate), $lte: new Date(endDate) }
+                }},
+                { $unwind: "$items" }, 
+                { $match: { "items.orderStatus": "Delivered" }},
+                { $lookup: { 
+                    from: "products", 
+                    localField: "items.product",
+                    foreignField: "_id",
+                    as: "items.product"
+                }},
+                { $addFields: { 
+                    "items.product": { $arrayElemAt: ["$items.product", 0] } 
+                }},
+                { $group: { 
+                    _id: "$_id",
+                    userId: { $first: "$userId" },
+                    items: { $push: "$items" },
+                    totalPrice: { $first: "$totalPrice" },
+                    couponDiscount: { $first: "$couponDiscount" },
+                    billingDetails: { $first: "$billingDetails" },
+                    paymentStatus: { $first: "$paymentStatus" },
+                    orderDate: { $first: "$orderDate" },
+                    paymentMethod: { $first: "$paymentMethod" }
+                }}
+            ]).exec();
       
-            // Process fetched orders to extract necessary information for the report
+            
             const reportData = orders.map((order, index) => {
                 let totalPrice = 0;
                 order.items.forEach(product => {
@@ -126,6 +150,35 @@ const adminController={
             res.status(500).json({ error: 'Failed to generate report' });
         }
       },
+      statistics:async (req,res)=>{
+            try {
+                const ordersCount = await Order.countDocuments({});
+                const customers = await User.countDocuments({});
+                const productsCount = await Products.countDocuments({})
+
+                
+                const Revenue = await Order.aggregate([
+                    {
+                        $group: {
+                            _id: null,
+                            totalAmount: { $sum: "$totalPrice" }
+                        }
+                    }
+                ]);
+    
+                // Extracting total revenue from the aggregation result
+                const totalRevenue = Revenue.length > 0 ? Revenue[0].totalAmount : 0;
+    
+                res.render('admin/statistics', { ordersCount, totalRevenue,customers,productsCount });
+            } catch (error) {
+                console.error("Error:", error);
+                res.status(500).send("Internal Server Error");
+            }
+        
+
+      },
+
+      
 
 
 
@@ -140,6 +193,132 @@ const adminController={
         const user = await User.findByIdAndUpdate(id,{isblocked:true});
         res.redirect('/customer')
     },
+
+    bestSellingProducts:async (req, res) => {
+        try {
+          const bestSellingProducts = await Order.aggregate([
+            { $unwind: '$items' },
+            {
+              $group: {
+                _id: '$items.product',
+                totalQuantity: { $sum: '$items.quantity' },
+              },
+            },
+            { $sort: { totalQuantity: -1 } },
+            { $limit: 10 }, 
+            {
+              $lookup: {
+                from: 'products',
+                localField: '_id',
+                foreignField: '_id',
+                as: 'product',
+              },
+            },
+            { $unwind: '$product' },
+            {
+              $project: {
+                _id: '$product._id',
+                productTitle: '$product.product',
+                totalQuantity: 1,
+              },
+            },
+          ]);
+      
+          res.render("admin/bestSellingProducts",{bestSellingProducts });
+        } catch (err) {
+          next(err);
+        }
+      },
+      bestSellingCategories: async (req, res) => {
+        try {
+          const bestSellingCategories = await Order.aggregate([
+            { $unwind: '$items' },
+            {
+              $lookup: {
+                from: 'products',
+                localField: 'items.product',
+                foreignField: '_id',
+                as: 'product',
+              },
+            },
+            { $unwind: '$product' },
+            {
+              $group: {
+                _id: '$product.category',
+                totalQuantity: { $sum: '$items.quantity' },
+              },
+            },
+            {
+              $sort: { totalQuantity: -1 },
+            },
+            {
+              $limit: 10, 
+            },
+            {
+              $lookup: {
+                from: 'categories',
+                localField: '_id',
+                foreignField: '_id',
+                as: 'category',
+              },
+            },
+            { $unwind: '$category' },
+            {
+              $project: {
+                _id: '$category._id',
+                category: '$category.category',
+                totalQuantity: 1,
+              },
+            },
+          ]);
+          res.render('admin/bestSellingCategory',{bestSellingCategories });
+        } catch (err) {
+          next(err);
+        }
+      },
+      bestSellingBrands: async (req, res) => {
+        try {
+          const bestSellingBrands = await Order.aggregate([
+              { $unwind: '$items' },
+              {
+                  $lookup: {
+                      from: 'products',
+                      localField: 'items.product',
+                      foreignField: '_id',
+                      as: 'product',
+                  },
+              },
+              { $unwind: '$product' },
+              {
+                  $group: {
+                      _id: '$product.brand',
+                      totalQuantity: { $sum: '$items.quantity' },
+                  },
+              },
+              { $sort: { totalQuantity: -1 } },
+              { $limit: 10 },
+              {
+                  $lookup: {
+                      from: 'brands',
+                      localField: '_id',
+                      foreignField: '_id',
+                      as: 'brand',
+                  },
+              },
+              { $unwind: '$brand' },
+              {
+                  $project: {
+                      _id: '$brand._id',
+                      brandName: '$brand.brand',
+                      totalQuantity: 1,
+                  },
+              },
+          ]);
+          res.render('admin/bestSellingBrand', { bestSellingBrands });
+      } catch (err) {
+          next(err);
+      }
+      },
 
     
     

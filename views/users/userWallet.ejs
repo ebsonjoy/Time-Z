@@ -766,20 +766,29 @@
                                                   <ul class="profile-list" id="transaction-list">
                                                     <% wallet.transactionHistory.reverse().forEach(transaction => { %>
                                                         <li class="profile-item">
-                                                            <div class="transaction-details">
-                                                                <div class="transaction-description">
-                                                                    <%= transaction.description %>: 
-                                                                </div>
-                                                                <div class="transaction-price"> 
-                                                                    ₹<%= transaction.amount %>
-                                                                </div>
+                                                          <div class="transaction-details">
+
+
+                                                          <% if (transaction.type === 'deposit') { %>
+                                                            <div class="transaction-description" style="color: green;">
+                                                              <%= transaction.description %>:
+                                                              ₹<%= transaction.amount %> +
                                                             </div>
+                                                          <% }else{ %>
+                                                            <div class="transaction-description" style="color: rgb(183, 4, 4);">
+                                                              <%= transaction.description %>:
+                                                              ₹<%= transaction.amount %>-
+                                                            </div>
+
+                                                            <% } %>
+                                                          </div>
                                                             <div class="transaction-date">
                                                                 (Date: <%= new Date(transaction.createdAt).toLocaleDateString() %>)
                                                             </div>
                                                         </li>
                                                     <% }); %>
-                                                </ul>
+                                                </ul> 
+                                                
                                                 
                                                 </div>
                                             </div>

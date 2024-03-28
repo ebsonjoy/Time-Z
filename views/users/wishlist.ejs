@@ -28,6 +28,23 @@
   }
   
       </style>
+       <style>
+        .textdiv {
+          font-family: Arial, sans-serif; 
+          background-color: #f0f0f0; 
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 50vh;
+        }
+        .text {
+          font-size: 32px; 
+          color: #333; 
+          text-align: center;
+        }
+      </style>
   </head>
 
   <body>
@@ -388,6 +405,7 @@
                     <div class="col-12">
                         <div class="table-responsive">
                           <% if (user) { %>
+                            <% if (wishlist && wishlist.items && wishlist.items.length) { %>
                            
                             <table class="table shopping-summery text-center">
                                 <thead>
@@ -400,7 +418,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                  <% if (wishlist && wishlist.items && wishlist.items.length) { %>
                                       <% wishlist.items.forEach(item => { %>
                                           <tr>
                                               <td class="image product-thumbnail">
@@ -428,16 +445,22 @@
                                           </tr>
                                       <% }) %>
                                     
-                                  <% } else { %>
-                                      <tr>
-                                          <td colspan="6">No items in wishlist</td>
-                                      </tr>
-                                  <% } %>
+                                 
                               </tbody>
-                              
                             </table>
+
+                            <% } else { %>
+                              <div class=" textdiv">
+                                <h1 class="text" >No items add</h1>
+                              </div>
+                            <% } %>
+
+
                           <% }else{ %>
-                            <h2>Please Login</h2>
+                            <div class=" textdiv">
+                              <h1 class="text" >Please </h1>
+                              <a href="/userLogin" class="btn">Login</a>
+                            </div>
                             <% } %>
 
                         </div>

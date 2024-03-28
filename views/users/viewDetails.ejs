@@ -651,7 +651,7 @@
                                       <h2 class="title-detail"><%= prod.product %></h2>
                                       <div class="product-detail-rating">
                                           <div class="pro-details-brand">
-                                              <span> Brands: <a href="shop-grid-right.html"><%=prod.brand %></a></span>
+                                              <span> Brands: <%=prod.brand.brand %></span>
                                           </div>
                                           <div class="product-rate-cover text-end">
                                               <div class="product-rate d-inline-block">
@@ -746,7 +746,7 @@
                                           <tr class="folded-w-wheels">
                                               <th>Brand</th>
                                               <td>
-                                                  <p><%= prod.brand  %></p>
+                                                  <p><%= prod.brand.brand  %></p>
                                               </td>
                                           </tr>
                                           
@@ -1191,6 +1191,7 @@
       function cart(id) {
         Swal.fire({
           title: "Successfully add to cart!",
+          icon:'success', 
           showCancelButton: false,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",

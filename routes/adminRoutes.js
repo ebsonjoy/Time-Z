@@ -9,6 +9,9 @@ const {upload,productsController} = require("../controller/productsController")
 const adminOrderController = require("../controller/adminOrderController");
 const adminCouponController = require("../controller/adminCouponController");
 const { route } = require('./userRoutes');
+const dashboardController = require("../controller/dashboardController");
+const adminBrandController = require("../controller/adminBrandController")
+
 
 
 
@@ -21,7 +24,6 @@ const { route } = require('./userRoutes');
 // admin login
 router.get("/adminLogin",adminController.adminLogin)
 router.post("/submit",adminController.adminLoginPost)
-router.get("/dashboard",adminController.adminDashboard)
 router.get("/adminLogout",adminController.adminLogout)
 //---------------------------------------------------------------------------
 
@@ -69,7 +71,34 @@ router.post('/updateCoupon/:id',adminCouponController.updateCoupon)
 // dashboard
 
 // router.post('/generate-report',adminController.generateReport)
+router.get("/dashboard",dashboardController.getDashboard)
+router.get('/fetchdashboard',dashboardController.fetchdashboard)
+
+
+// Statistics
+
+router.get("/statistics",adminController.statistics)
 router.post('/generate-report',adminController.generateReport)
+
+
+// brand
+router.get("/brand",adminBrandController.adminBrand)
+router.get("/addBrand",adminBrandController.adminAddBrand)
+router.post("/submitBrand",adminBrandController.adminNewBrand)
+router.get('/editBrand/:id',adminBrandController.adminEditBrand)
+router.post('/submitEditBrand/:id', adminBrandController.adminUpdateBrand)
+router.get('/listBrand/:id',adminBrandController.BrandList)
+router.get('/unlistBrand/:id',adminBrandController.BrandUnlist)
+
+// best Selling 
+
+router.get('/bestSellingProducts',adminController.bestSellingProducts)
+router.get('/bestSellingCategories',adminController.bestSellingCategories)
+router.get('/bestSellingBrands',adminController.bestSellingBrands)
+
+
+
+
 
 
 

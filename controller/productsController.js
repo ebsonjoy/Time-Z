@@ -3,6 +3,7 @@ const Category = require('../models/category')
 const Products = require('../models/products');
 const multer = require('multer');
 const products = require('../models/products');
+const Brand = require('../models/brand')
 
 
 
@@ -72,11 +73,12 @@ const productsController = {
         }
     },
     adminAddProducts:async (req,res)=>{
-        const category = await Category.find()
-        res.render('admin/addproducts',{cate:category})
+        const category = await Category.find() 
+        const brand = await Brand.find()
+        res.render('admin/addproducts',{cate:category, brand:brand})
     },
     adminNewProducts:async(req,res)=>{
-        const existingproduct = await Products.findOne({product : req.body.category});
+        const existingproduct = await Products.findOne({product : req.body.product});
         if(existingproduct){
             res.render('users/addproducts')
         }else{
@@ -111,12 +113,13 @@ const productsController = {
         try{
             const id = req.params.id;
             const category = await Category.find()
-            const prod = await Products.findById(id).populate('category')
+            const brand = await Brand.find()
+            const prod = await Products.findById(id).populate('category').populate('brand')
             if(!prod){
                 res.redirect('admin/products');
                 return;
             }
-            res.render('admin/editproduct',{prod:prod,cate:category});
+            res.render('admin/editproduct',{prod:prod,cate:category, brand:brand});
         }catch(err){
             console.error(err);
             res.redirect('admin/products')

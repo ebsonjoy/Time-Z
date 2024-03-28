@@ -674,7 +674,12 @@
                                                             <td><%= item.totalPrice %></td>
                                                             <td class="<%= item.paymentStatus === 'Paid' ? 'Paid' : 'Pending' %>"><%= item.paymentStatus %></td>
                                                             <td>
-                                                                  <a href="/orderTrack/<%= item._id %>" class="btn btn-primary btn-sm rounded">Track Order</a>      
+                                                              <% if (item.paymentStatus === 'Failed') { %>
+                                                                <a href="/checkOut?itemId=<%= item._id %>" class="btn btn-sm rounded" style="background-color: #ff0707;">Retry Order</a>    
+                                                               
+                                                              <% }else{ %>
+                                                                <a href="/orderTrack/<%= item._id %>" class="btn btn-primary btn-sm rounded">Track Order</a> 
+                                                                <% } %>     
                                                           </td>
                                                           
                                                         </tr>

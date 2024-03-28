@@ -9,7 +9,10 @@ const products = require('../models/products');
 const Order = require('../models/order');
 const Category = require('../models/category')
 const Wallet = require('../models/wallet')
-
+const fs = require('fs');
+const ejs = require("ejs");
+const pdf = require("html-pdf");
+const path = require('path')
 
 
 
@@ -183,96 +186,85 @@ const userController = {
     },
     userShop: async (req, res) => {
         try {
-          const category = req.params.category || undefined; 
-          const sort = req.query.sort; 
-          const page = req.params.page || 1; 
-          const limit = 6; 
-          const skip = (page - 1) * limit; 
-          
-          let prod;
-          let cate;
-      
-          let query = { ispublished: true };
-      
-         
-          if (category) {
-              query.category = category;
-          }
-      
-          
-          let sortOptions = {};
-          if (sort === 'lowToHigh') {
-              sortOptions.price = 1;
-          } else if (sort === 'highToLow') {
-              sortOptions.price = -1;
-          }
-      
-         
-          let pipeline = [
-              {
-                  $match: query
-              },
-              {
-                  $lookup: {
-                      from: 'categories',
-                      localField: 'category',
-                      foreignField: '_id',
-                      as: 'category'
-                  }
-              },
-              {
-                  $addFields: {
-                      category: { $arrayElemAt: ['$category', 0] } 
-                  }
-              },
-              {
-                  $match: { 'category.islisted': true }
-              },
-              {
-                  $skip: skip
-              },
-              {
-                  $limit: limit
-              }
-          ];
-      
-          
-          if (Object.keys(sortOptions).length > 0) {
-              pipeline.unshift({ $sort: sortOptions });
-          }
-      
-         
-          prod = await products.aggregate(pipeline);
-      
-          
-          const totalProductsCount = await products.countDocuments(query);
-          const totalPages = Math.ceil(totalProductsCount / limit);
-      
-         
-          cate = await Category.find({ islisted: true });
-      
-          // Render the view with data
-          res.render("users/shop", {
-              prod: prod,
-              cate: cate,
-              user: req.session.user,
-              text: category, 
-              sort: sort, 
-              currentPage: page, 
-              totalPages: totalPages
-          });
+            const category = req.params.category || undefined; 
+            const sort = req.query.sort; 
+            const page = req.params.page || 1; 
+            const limit = 6; 
+            const skip = (page - 1) * limit; 
+    
+            let prod;
+            let cate;
+    
+            let query = { ispublished: true };
+    
+            let sortOptions = {};
+    
+            if (sort === 'lowToHigh') {
+                sortOptions.price = 1;
+            } else if (sort === 'highToLow') {
+                sortOptions.price = -1;
+            }
+    
+            
+            cate = await Category.find({ islisted: true });
+    
+           
+            const listedCategoryIds = cate.map(category => category._id);
+    
+            
+            if (category) {
+                
+                const requestedCategory = await Category.findOne({ _id: category, islisted: true });
+                if (!requestedCategory) {
+                   
+                    return res.render("users/shop", {
+                        prod: [],
+                        cate: cate,
+                        user: req.session.user,
+                        text: category, 
+                        sort: sort, 
+                        currentPage: page, 
+                        totalPages: 0 
+                    });
+                }
+               
+                query.category = category;
+            } else {
+                
+                query.category = { $in: listedCategoryIds };
+            }
+    
+            
+            prod = await products.find(query)
+                                 .sort(sortOptions)
+                                 .skip(skip)
+                                 .limit(limit)
+                                 .populate('category');
+    
+            const totalProductsCount = await products.countDocuments(query);
+            const totalPages = Math.ceil(totalProductsCount / limit);
+    
+            res.render("users/shop", {
+                prod: prod,
+                cate: cate,
+                user: req.session.user,
+                text: category, 
+                sort: sort, 
+                currentPage: page, 
+                totalPages: totalPages
+            });
         } catch (error) {
-          console.error("Error fetching products:", error);
-          res.status(500).send("Internal Server Error");
+            console.error("Error fetching products:", error);
+            res.status(500).send("Internal Server Error");
         }
-      },
+    },
     
     
 
     viewDetails:async (req,res)=>{
         try{
             const id = req.params.id;
-            const prod = await products.findById(id).populate("category")
+            const prod = await products.findById(id).populate("category").populate("brand")
             const prods = await products.find({ispublished:true})
             .populate({
                 path:"category",
@@ -302,23 +294,23 @@ const userController = {
         const newPassword = req.body.password;
     
         try {
-            // Find user by email
+            
             const user = await User.findOne({ email: postEmail });
             if (!user) {
                 return res.redirect('/forgotpassword');
             }
     
-            // Hash the new password
+            
             const hashedPassword = await bcrypt.hash(newPassword, saltPassword);
     
-            // Update user's password
+            
             user.password = hashedPassword;
             await user.save();
     
-            // Redirect user to login page after successful password reset
+            
             return res.redirect('/userLogin');
         } catch (error) {
-            // Handle errors
+            
             return res.status(500).json({ message: error.message, type: "danger" });
         }
     },
@@ -364,7 +356,7 @@ const userController = {
         const newPassword = req.body.newPassword;
     
         try {
-            // Find user by id
+           
             const data = await User.findById(id)
             if (data) {
                 const passwordMatch = await bcrypt.compare(req.body.currentPassword,data.password);
@@ -386,7 +378,7 @@ const userController = {
                 return res.redirect('/usersProfileHome')
             }
         } catch (error) {
-            // Handle errors
+           
             return res.status(500).json({ message: error.message, type: "danger" });
         }
     },
@@ -394,7 +386,8 @@ const userController = {
     ordersProfile:async (req,res)=>{
         const userId = req.session.userID
         
-        const order = await Order.find({userId:userId})
+        const order = await Order.find({userId:userId}).sort({ orderDate: -1 })
+        
         res.render("users/ordersProfile",{user:req.session.user,order:order})
     },
 
@@ -406,7 +399,7 @@ const userController = {
             const userId = req.session.userID;
             
             
-            // Fetching order details for the user
+            
             const order = await Order.find({ userId: userId }).populate({
                 path:"items.product",
                 message:"product"
@@ -415,7 +408,7 @@ const userController = {
                 return res.status(404).send("Order not found");
             }
 
-            // Finding the specific order item
+            
             const orderItem = order.find(item => item._id.toString() === id);
             
             if (!orderItem) {
@@ -450,40 +443,10 @@ const userController = {
         }
     },
 
-
-    // cancelOrder: async (req, res) => {
-    //     try {
-    //         const orderId = req.params.id;
-    //         const userId = req.session.userID;
-            
-           
-            
-           
-    //         const order = await Order.findById(orderId);
-    //         const amount = order.totalPrice;
-    //         if (!order) {
-    //             return res.status(404).json({ error: 'Order not found' });
-    //         }
-    //         else if(order.paymentStatus === 'Paid') {
-    //             const wallet = await Wallet.findOneAndUpdate({ userId }, {
-    //                 $inc: { balance: amount },
-    //                 $push: { transactionHistory: { amount, type: 'deposit', description: "Amount added through Cancel order" } }
-    //             }, { new: true });
-    //             order.orderStatus = 'Cancelled';
-    //             await order.save();
-            
-    //         }
-            
-    //         // This block will execute regardless of the conditions above
-    //         order.orderStatus = 'Cancelled';
-    //         await order.save();
     
-    //         res.redirect("/ordersProfile")
-    //     } catch (error) {
-    //         console.error('Error canceling order:', error);
-    //         return res.status(500).json({ error: 'Internal server error' });
-    //     }
-    // },
+
+
+    
 
     orderTrackReturnOrder: async (req, res) => {
         const { productId, orderId } = req.body;
@@ -524,7 +487,7 @@ const userController = {
         }
         if(order.paymentStatus === 'Paid'){
             await products.findByIdAndUpdate(productOne, { $inc: { stock: cancelProduct.quantity } });
-             order.totalPrice -= amount ;
+            //  order.totalPrice -= amount ;
              await order.save();
             //  const userWallet = await Wallet.findOne({ userId: req.session.userID })
                     
@@ -578,6 +541,49 @@ const userController = {
           res.status(500).json({ error: 'Internal server error' });
         }
       },
+
+      getOrderInvoice : async(req,res) => {
+        try{
+        const  orderId  = req.params.orderId; 
+        console.log(orderId);   
+            const categoryData = await Category.find({status:'active'})
+            // const orderId = req.params.orderId;
+            const userId = req.session.userID;
+            const order = await Order.findById(orderId).populate('items.product')
+            const user = await User.findById(userId)
+    
+            if (!order) {
+                return res.status(404).json({ success: false, message: 'Order not found' });
+            }
+    
+            const invoiceTemplatePath = path.join(__dirname,'..','views', 'users','invoice.ejs');
+    
+            const invoiceHtml = await ejs.renderFile(invoiceTemplatePath,{categoryData,order,user});
+    
+            const options = {
+                format: 'A4',
+                orientation:'portrait',
+                border:'10mm'
+            }
+    
+            pdf.create(invoiceHtml, options).toStream((err, stream) => {
+                if(err) {
+                    console.log('Error generating PDF:',err);
+                    return res.status(500).json({ success: false, message: 'Error generating PDF' });
+                }
+    
+                res.setHeader('Content-Type', 'application/pdf');
+                res.setHeader('Content-Disposition', 'attachment; filename="invoice.pdf"');
+    
+                stream.pipe(res);
+            })
+            
+    
+        }catch(error){
+            console.log(error.message);
+            res.status(500).json({success:false,message:'Internal server error'})
+        }
+    },
     
 }
 
