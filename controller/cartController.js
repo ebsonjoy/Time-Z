@@ -67,6 +67,7 @@ checkOut: async(req,res)=>{
             path: "items.product",
             message: "product"
         });
+        order.totalPrice -=60;
         const address = await Address.findOne({ userId: userId });
         const data = await User.findById(userId);
         const cartTotalPrice = order.totalPrice;
@@ -92,11 +93,14 @@ checkOut: async(req,res)=>{
         const data = await User.findById(userId)
     const address = await Address.findOne({ userId: userId });
     // const coupons = await Coupon.find({ isListed: true });
+    
 
     const userCart = await Cart.findOne({userId:userId}).populate({
         path:"items.product",
         message:"product"
     })
+    
+    
     
     const userCarts = await Cart.findOne({ userId });
     

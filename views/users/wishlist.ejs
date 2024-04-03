@@ -19,15 +19,15 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="/static/User_assets/css/main.css?v=3.4" />
     <style>
-        .text-danger {
-      color: red;
-  }
-  
-  .text-success {
-      color: green;
-  }
-  
-      </style>
+      .text-danger {
+    color: red;
+}
+
+.text-success {
+    color: green;
+}
+
+    </style>
        <style>
         .textdiv {
           font-family: Arial, sans-serif; 
@@ -429,11 +429,11 @@
                                               <td class="price" data-title="Price">
                                                   <span><%= item.price %></span>
                                               </td>
-                                              <td class="text-center" data-title="Stock" <%= item.product.stock < 1 ? 'text-danger' : (item.product.stock === 1 ? 'text-danger' : 'text-success') %>>
-                                                  <span class="color3 font-weight-bold">
-                                                      <%= item.product.stock < 1 ? 'Out of stock' : (item.product.stock === 1 ? '1 item in stock' : item.product.stock + ' items in stock') %>
-                                                  </span>
-                                              </td>
+                                              <td class="text-center <%= item.product.stock < 1 ? 'text-danger' : (item.product.stock === 1 ? 'text-danger' : 'text-success') %>" data-title="Stock">
+                                                <span class="color3 font-weight-bold">
+                                                    <%= item.product.stock < 1 ? 'Out of stock' : (item.product.stock === 1 ? '1 item in stock' : item.product.stock + ' items in stock') %>
+                                                </span>
+                                            </td>
                                               <td class="text-right" data-title="Cart">
                                                   <button class="btn btn-sm" onclick="cart('<%= item.product.id %>')">
                                                       <i class="fi-rs-shopping-bag mr-5"></i>Add to cart

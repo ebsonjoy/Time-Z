@@ -565,7 +565,7 @@
                 <div class="header-action-2">
                   
                   <div class="header-action-icon-2">
-                    <a href="shop-wishlist.html">
+                    <a href="/wishlist">
                       <img class="svgInject" alt="Evara" src="/static/User_assets/imgs/theme/icons/icon-heart.svg" />
                       <!-- <span class="pro-count blue">4</span> -->
                     </a>
@@ -1032,10 +1032,10 @@
                                                   </tr>
                                               <% }) %>
                                               
-                                              <tr>
+                                              <!-- <tr>
                                                   <th>SubTotal</th>
-                                                  <td class="product-subtotal" colspan="2">₹<%=cart.totalPrice%></td>
-                                              </tr>
+                                                  <td class="product-subtotal" colspan="2">₹cart.totalPrice%></td>
+                                              </tr> -->
                                               <tr>
                                                   <th>Shipping</th>
                                                   <td colspan="2"><em>₹ 60
@@ -1053,8 +1053,8 @@
                                                   <th>Total</th>
                                                   <td colspan="2" class="product-subtotal">
                                                     <span class="font-xl text-brand fw-900">Rs :</span>
-                                                    <span id="subtotal" class="font-xl text-brand fw-900"><%= cart.totalPrice + 60%></span>
-                                                    <input type="hidden" name="totalPrice" id="totalPriceInput" value="<%= cart.totalPrice + 60 %>">
+                                                    <span id="subtotal" class="font-xl text-brand fw-900"><%= cart.totalPrice +60 %></span>
+                                                    <input type="hidden" name="totalPrice" id="totalPriceInput" value="<%= cart.totalPrice +60 %>">
                                                 </td>
                                                 <!-- <input type="hidden" id="couponId"> -->
                                                 

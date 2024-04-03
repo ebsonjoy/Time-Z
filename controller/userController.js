@@ -266,6 +266,7 @@ const userController = {
             const id = req.params.id;
             const prod = await products.findById(id).populate("category").populate("brand")
             const prods = await products.find({ispublished:true})
+            
             .populate({
                 path:"category",
                 match:{islisted:true},
@@ -481,7 +482,29 @@ const userController = {
         const cancelProduct = order.items.find(product=> product._id.toString()=== productId );
         const productOne = cancelProduct.product
         const pro = await products.findOne({_id:productOne})
-        const amount = cancelProduct.price * cancelProduct.quantity
+       let amount;
+       let nonCancelledItemCount = 0;
+        for (const item of order.items) {
+            if (item.orderStatus !== 'Cancelled') {
+                nonCancelledItemCount++;
+            }
+            if (nonCancelledItemCount > 1) {
+                break;
+            }
+        }
+        
+        if (nonCancelledItemCount === 1) {
+            // console.log("Only one item not cancelled");
+            amount = cancelProduct.price * cancelProduct.quantity+60
+        } else {
+           
+            amount = cancelProduct.price * cancelProduct.quantity
+        }
+
+        
+
+        // const amount = cancelProduct.price * cancelProduct.quantity
+        
         if(!cancelProduct){
             return res.status(404).json({ error: 'Product not found in order' });
         }
@@ -584,6 +607,10 @@ const userController = {
             res.status(500).json({success:false,message:'Internal server error'})
         }
     },
+
+    contactUs:(req,res)=>{
+        res.render("users/contactUs",{user:req.session.userID})
+    }
     
 }
 

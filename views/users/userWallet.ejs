@@ -446,7 +446,7 @@
                 <div class="header-action-2">
                   
                   <div class="header-action-icon-2">
-                    <a href="shop-wishlist.html">
+                    <a href="/wishlist">
                       <img class="svgInject" alt="Evara" src="/static/User_assets/imgs/theme/icons/icon-heart.svg" />
                       <!-- <span class="pro-count blue">4</span> -->
                     </a>
@@ -1037,28 +1037,6 @@
         const balanceDisplay = document.getElementById('balance');
         const transactionList = document.getElementById('transaction-list');
 
-        // async function addFunds() {
-        //     const amount = parseFloat(document.getElementById('add-amount').value);
-        //     if (!isNaN(amount)) {
-        //         const response = await fetch('/addFunds', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             body: JSON.stringify({ amount })
-        //         });
-        //         const data = await response.json();
-        //         if (data.success) {
-        //             balanceDisplay.textContent = `Balance: ₹${data.balance}`;
-        //             addTransaction(amount, 'deposit');
-        //             document.getElementById('add-amount').value = '';
-        //         } else {
-        //             alert(data.message);
-        //         }
-        //     } else {
-        //         alert("Invalid amount!");
-        //     }
-        // }
 
         async function withdrawFunds() {
             const amount = parseFloat(document.getElementById('withdraw-amount').value);
@@ -1154,11 +1132,6 @@ addFunds();
 
 var rzp = new Razorpay(options);
 
-// rzp.on('payment.failed', function (response) {
-//   console.log("Payment failed:", response);
-//   document.getElementById('paymentStatus').value = 'Failed';
-//   submitForm();
-// });
 
 rzp.open();
 

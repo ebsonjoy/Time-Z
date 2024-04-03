@@ -114,12 +114,12 @@
                 </tbody>
             </table>
             <div class="total">
-                <p>Subtotal: Rs. <%= totalAmount.toFixed(2) %> /-</p>
                 <% if (couponAmount > 0) { %>
                     <p>Coupon Applied: Rs. <%= couponAmount.toFixed(2) %> /-</p>
                 <% } else { %>
                     <p>Coupon Applied: No coupon applied</p>
                 <% } %>
+                <p>Subtotal: Rs. <%= totalAmount.toFixed(2) %> /-</p>
                 <p>Delivery Charge : 60</p>
                 <p>Total: Rs. <%= total.toFixed(2) %> /-</p>
             </div>            

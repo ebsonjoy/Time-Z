@@ -99,6 +99,7 @@ const productsController = {
                 stock:req.body.stock,
                 category:req.body.category,
                 images:images,
+                // offerPer:req.body.offerPer
             });
             try{
                 await newproduct.save();

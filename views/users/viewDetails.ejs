@@ -18,6 +18,41 @@
     />
     <!-- Template CSS -->
     <link rel="stylesheet" href="/static/User_assets/css/main.css?v=3.4" />
+
+
+    <style>
+      .bodyyy {
+        font-family: Arial, sans-serif;
+        /* background-color: #f0f0f0; */
+        /* margin: 0;
+        padding: 0; */
+      }
+      .special-container {
+        max-width: 400px;
+        margin: 10px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .offer-title {
+        color: #333;
+      }
+      .offer-price {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      .discount-info {
+        font-size: 18px;
+        color: #888;
+        margin-bottom: 20px;
+      }
+      .total-amount {
+        font-size: 28px;
+        color: #27ae60;
+      }
+    </style>
     <style>
       .text-danger {
     color: red;
@@ -350,7 +385,7 @@
                 <div class="header-action-2">
                   
                   <div class="header-action-icon-2">
-                    <a href="shop-wishlist.html">
+                    <a href="/wishlist">
                       <img class="svgInject" alt="Evara" src="/static/User_assets/imgs/theme/icons/icon-heart.svg" />
                       <!-- <span class="pro-count blue">4</span> -->
                     </a>
@@ -661,6 +696,24 @@
                                               <span class="font-small ml-5 text-muted"> (25 reviews)</span>
                                           </div>
                                       </div>
+                                      <!-- < if (prod.offerPer>0) { >
+                                       
+                                      <div class="bodyyy">
+                                        <div class="special-container">
+                                          <h2 class="offer-title">Special Offer!</h2>
+                                          <div class="offer-price">
+                                            Offer Price: $100
+                                          </div>
+                                          <div class="discount-info">
+                                            Discount: $20 (20% off)
+                                          </div>
+                                          <div class="total-amount">
+                                            Total Pay Amount: $80
+                                          </div>
+                                        </div>
+                                      </div>
+                                      < } > -->
+
                                       <div class="clearfix product-price-cover">
                                         <div class="product-price primary-color float-left">
                                             <ins><span class="text-brand">₹<%= prod.price %></span></ins>
@@ -672,8 +725,15 @@
                                             discountPercent = Math.round(discountPercent * 100) / 100;
                                             %>
                                            <span class="save-price font-md color3 ml-15" style="color: rgb(84, 209, 84); font-weight: bold;"><%= discountPercent %>% Off</span>
+
+
+
+
+
+
                                         </div>
                                     </div>
+                                    
                                     
                                       <div class="bt-1 border-color-1 mt-15 mb-15"></div>
                                       <div class="short-desc mb-30">
@@ -961,7 +1021,7 @@
                                                   <div class="product-action-1">
                                                       <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal
 "><i class="fi-rs-search"></i></a>
-                                                      <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
+                                                      <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="/wishlist" tabindex="0"><i class="fi-rs-heart"></i></a>
                                                       <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
                                                   </div>
                                                   

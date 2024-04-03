@@ -53,6 +53,10 @@ const userSchema = new mongoose.Schema({
         type:Number,
         required:true,
     },
+    // offerPer:{
+    //     type:String,
+    //     required:true,
+    // },
     category:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"category",

@@ -115,6 +115,8 @@ router.post('/cancel-coupon', cartController.cancelCoupon);
 // Invoice
 router.get('/Invoice/:orderId',userController.getOrderInvoice)
 
+router.get("/contactUs",userController.contactUs)
+
 
 
 
