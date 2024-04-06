@@ -265,17 +265,21 @@ const userController = {
         try{
             const id = req.params.id;
             const prod = await products.findById(id).populate("category").populate("brand")
+            const reProducts = await products.find({category:prod.category})
+
+           
+
             const prods = await products.find({ispublished:true})
-            
             .populate({
                 path:"category",
                 match:{islisted:true},
             })
+            
             if(!prod){
                 res.redirect('/shop');
                 return;
             }
-            res.render('users/viewDetails',{prod:prod,prods:prods,user:req.session.user});
+            res.render('users/viewDetails',{prod:prod,prods:prods,user:req.session.user,reProducts});
         }catch(err){
             console.error(err);
             res.redirect('/shop')
@@ -483,6 +487,7 @@ const userController = {
         const productOne = cancelProduct.product
         const pro = await products.findOne({_id:productOne})
        let amount;
+       let finalAmount;
        let nonCancelledItemCount = 0;
         for (const item of order.items) {
             if (item.orderStatus !== 'Cancelled') {
@@ -500,10 +505,13 @@ const userController = {
            
             amount = cancelProduct.price * cancelProduct.quantity
         }
+        if(order.couponDiscount>0){
+            divideCouponAmount = order.couponDiscount / order.items.length
+            finalAmount = amount-divideCouponAmount;
+        }else{
+            finalAmount = amount;
+        }
 
-        
-
-        // const amount = cancelProduct.price * cancelProduct.quantity
         
         if(!cancelProduct){
             return res.status(404).json({ error: 'Product not found in order' });
@@ -515,8 +523,8 @@ const userController = {
             //  const userWallet = await Wallet.findOne({ userId: req.session.userID })
                     
                     const wallet = await Wallet.findOneAndUpdate({ userId: req.session.userID }, {
-                        $inc: { balance: amount },
-                        $push: { transactionHistory: { amount, type: 'deposit', description: "Amount added through Cancel One order" } }
+                        $inc: { balance: finalAmount },
+                        $push: { transactionHistory: { amount:finalAmount, type: 'deposit', description: "Amount added through Cancel One order" } }
                     }, { new: true });
                     cancelProduct.orderStatus = 'Cancelled';
                     await order.save();
@@ -568,7 +576,7 @@ const userController = {
       getOrderInvoice : async(req,res) => {
         try{
         const  orderId  = req.params.orderId; 
-        console.log(orderId);   
+           
             const categoryData = await Category.find({status:'active'})
             // const orderId = req.params.orderId;
             const userId = req.session.userID;
@@ -608,8 +616,9 @@ const userController = {
         }
     },
 
-    contactUs:(req,res)=>{
-        res.render("users/contactUs",{user:req.session.userID})
+   
+    aboutUs:(req,res)=>{
+        res.render("users/aboutUs",{user:req.session.userID})
     }
     
 }

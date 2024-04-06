@@ -2,7 +2,6 @@ const express = require('express');
 const nocache = require('nocache');
 const router = express.Router();
 router.use(nocache());
-
 const adminController = require("../controller/adminController");
 const adminCategoryController = require("../controller/adminCategoryController");
 const {upload,productsController} = require("../controller/productsController")
@@ -11,6 +10,7 @@ const adminCouponController = require("../controller/adminCouponController");
 const { route } = require('./userRoutes');
 const dashboardController = require("../controller/dashboardController");
 const adminBrandController = require("../controller/adminBrandController")
+const admin = require('../middleware/adminHandle');
 
 
 
@@ -28,24 +28,24 @@ router.get("/adminLogout",adminController.adminLogout)
 //---------------------------------------------------------------------------
 
 // admin Customer
-router.get("/customer",adminController.adminCustomer)
+router.get("/customer",admin,adminController.adminCustomer)
 router.get('/block/:id',adminController.UserBlock)
 router.get('/unblock/:id',adminController.UserUnblock)
 // --------------------------------------------------------------------------
 
 // Admin Category
-router.get("/category",adminCategoryController.adminCategory)
-router.get("/addcategory",adminCategoryController.adminAddCategory)
+router.get("/category",admin,adminCategoryController.adminCategory)
+router.get("/addcategory",admin,adminCategoryController.adminAddCategory)
 router.post("/submitcategory",adminCategoryController.adminNewCategory)
-router.get('/editcategory/:id',adminCategoryController.adminEditCategory)
+router.get('/editcategory/:id',admin,adminCategoryController.adminEditCategory)
 router.post('/submiteditcategory/:id', adminCategoryController.adminUpdateCategory)
 router.get('/list/:id',adminCategoryController.CategoryList)
 router.get('/unlist/:id',adminCategoryController.CategoryUnlist)
 // --------------------------------------------------------------------------
 
 // Admin Product
-router.get("/products",productsController.adminProducts)
-router.get("/addproducts",productsController.adminAddProducts)
+router.get("/products",admin,productsController.adminProducts)
+router.get("/addproducts",admin,productsController.adminAddProducts)
 router.post("/submitproduct",upload,productsController.adminNewProducts)
 router.get("/edit/:id",productsController.adminEditProduct)
 router.post('/update/:id',upload,productsController.adminUpdateProduct)
@@ -55,36 +55,33 @@ router.get('/unpublish/:id',productsController.ProductUnpublish)
 
 
 // Admin Order
-router.get("/adminOrderProfile",adminOrderController.adminOrderProfile)
-router.get("/orderDetails/:id",adminOrderController.orderDetails)
+router.get("/adminOrderProfile",admin,adminOrderController.adminOrderProfile)
+router.get("/orderDetails/:id",admin,adminOrderController.orderDetails)
 router.post('/update_order_status',adminOrderController.updateOrderStatus);
 
 // coupon
-router.get('/coupon',adminCouponController.couponPage)
-router.get('/addCoupon',adminCouponController.addCoupon)
+router.get('/coupon',admin,adminCouponController.couponPage)
+router.get('/addCoupon',admin,adminCouponController.addCoupon)
 router.post('/submitNewCoupon',adminCouponController.submitNewCoupon)
 router.get('/listCoupon/:id',adminCouponController.couponList)
 router.get('/unlistCoupon/:id',adminCouponController.couponUnlist)
-router.get('/editCoupon/:id',adminCouponController.editCoupon)
+router.get('/editCoupon/:id',admin,adminCouponController.editCoupon)
 router.post('/updateCoupon/:id',adminCouponController.updateCoupon)
 
 // dashboard
-
-// router.post('/generate-report',adminController.generateReport)
-router.get("/dashboard",dashboardController.getDashboard)
+router.get("/dashboard",admin,dashboardController.getDashboard)
 router.get('/fetchdashboard',dashboardController.fetchdashboard)
 
 
 // Statistics
-
-router.get("/statistics",adminController.statistics)
+router.get("/statistics",admin,adminController.statistics)
 router.post('/generate-report',adminController.generateReport)
 
 
 // brand
-router.get("/brand",adminBrandController.adminBrand)
-router.get("/addBrand",adminBrandController.adminAddBrand)
-router.post("/submitBrand",adminBrandController.adminNewBrand)
+router.get("/brand",admin,adminBrandController.adminBrand)
+router.get("/addBrand",admin,adminBrandController.adminAddBrand)
+router.post("/submitBrand",admin,adminBrandController.adminNewBrand)
 router.get('/editBrand/:id',adminBrandController.adminEditBrand)
 router.post('/submitEditBrand/:id', adminBrandController.adminUpdateBrand)
 router.get('/listBrand/:id',adminBrandController.BrandList)
@@ -92,9 +89,9 @@ router.get('/unlistBrand/:id',adminBrandController.BrandUnlist)
 
 // best Selling 
 
-router.get('/bestSellingProducts',adminController.bestSellingProducts)
-router.get('/bestSellingCategories',adminController.bestSellingCategories)
-router.get('/bestSellingBrands',adminController.bestSellingBrands)
+router.get('/bestSellingProducts',admin,adminController.bestSellingProducts)
+router.get('/bestSellingCategories',admin,adminController.bestSellingCategories)
+router.get('/bestSellingBrands',admin,adminController.bestSellingBrands)
 
 
 

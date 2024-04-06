@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Dashboard</title>
+    <title>WatchNest</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +12,11 @@
     <meta property="og:url" content="">
     <meta property="og:image" content="">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="/static/assets/imgs/theme/favicon.svg">
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="/static/products/titleimg.jpg"
+    />
     <!-- Template CSS -->
     <link href="/static/assets/css/main.css" rel="stylesheet" type="text/css" />
 </head>
@@ -21,7 +25,7 @@
     <div class="screen-overlay"></div>
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
-            <h1 class="brand-wrap">TimeZ</h1>
+            <h1 class="brand-wrap">WatchNest</h1>
             <div>
                 <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
             </div>
@@ -238,20 +242,7 @@
 
 
         </section> <!-- content-main end// -->
-        <footer class="main-footer font-xs">
-            <div class="row pb-30 pt-15">
-                <div class="col-sm-6">
-                    <script>
-                    document.write(new Date().getFullYear())
-                    </script> ©, Evara - HTML Ecommerce Template .
-                </div>
-                <div class="col-sm-6">
-                    <div class="text-sm-end">
-                        All rights reserved
-                    </div>
-                </div>
-            </div>
-        </footer>
+        
     </main>
     <script src="/static/assets/js/vendors/jquery-3.6.0.min.js"></script>
 
@@ -329,9 +320,15 @@
 });
 
 function downloadPdf() {
-  const element = document.getElementById('reportTableBody')
-  console.log(element);
-  html2pdf().from(element).save();
+    const table = document.getElementById('reportContainer').innerHTML;
+    const filename = 'report.pdf';
+
+    html2pdf().from(table).set({
+        margin: 1,
+        filename: filename,
+        html2canvas: { scale: 2 },
+        jsPDF: { orientation: 'landscape', unit: 'in', format: 'letter', compressPDF: true }
+     }).save();
 }
 
 function downloadExcel() {

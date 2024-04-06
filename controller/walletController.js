@@ -20,7 +20,7 @@ const walletController = {
                 await wallet.save();
             }
 
-            res.render('users/userWallet', { wallet,data,user:req.session.user});
+            res.render('users/userWallet', { wallet,data,user:req.session.user,razorpayKey: process.env.RAZORPAY_KEY,});
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server Error');

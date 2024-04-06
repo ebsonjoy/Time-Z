@@ -86,13 +86,14 @@ checkOut: async(req,res)=>{
             user: req.session.user,
             address: address,
             coupons: validCoupons,
+            razorpayKey: process.env.RAZORPAY_KEY,
         });
 
 
     } else {
         const data = await User.findById(userId)
     const address = await Address.findOne({ userId: userId });
-    // const coupons = await Coupon.find({ isListed: true });
+   
     
 
     const userCart = await Cart.findOne({userId:userId}).populate({
@@ -120,6 +121,7 @@ checkOut: async(req,res)=>{
          user:req.session.user,
          address:address,
          coupons:validCoupons,
+         razorpayKey: process.env.RAZORPAY_KEY,
         })
     }
 
@@ -333,60 +335,13 @@ checkCoupon :async (req, res) => {
         res.json({totalAmount:amountToPay,couponId:couponCode,discountAmount:amountDividedBYPercentage,couponCode:couponCode.coupon_code})
     }
 
-
-
-        
-        
-        // const discount = coupon.maximumAmount
-        // const newTotalPrice = userCart.totalPrice - discount;
-        // return res.status(200).json({ message: 'Coupon applied successfully', newTotalPrice });
     } catch (error) {
         console.error('Error applying coupon:', error);
         return res.status(500).json({ error: 'Internal server error' });
     }
 },
 
-// try {
-//     const couponId = req.body.couponId
-//     const userCart = await Cart.findOne({userID:req.session.userID})
-//     const totalAmount = userCart.totalPrice + 50
-//     const selectedCoupon = await Coupon.findById(couponId)
-//     const amountDividedBYPercentage = Math.ceil(totalAmount*selectedCoupon.percentage/100)
-//     if(amountDividedBYPercentage > selectedCoupon.maximumAmount ){
-//         const amountToPay = totalAmount - selectedCoupon.maximumAmount
-//         res.json({totalAmount:amountToPay,couponId:couponId,discountAmount:selectedCoupon.maximumAmount,couponCode:selectedCoupon.coupon_code})   
-//     }else{
-//         const amountToPay = totalAmount-amountDividedBYPercentage
-//         res.json({totalAmount:amountToPay,couponId:couponId,discountAmount:amountDividedBYPercentage,couponCode:selectedCoupon.coupon_code})
-//     }
-// } catch (error) {
-//     console.error(error);
-// }
 
-
-
-
-
-cancelCoupon :async (req, res) => {
-    try {
-        
-        const userId = req.session.userID;
-        const userCart = await Cart.findOne({ userId });
-
-        if (!userCart) {
-            return res.status(404).json({ message: 'Cart not found' });
-        }
-
-       
-        const originalTotalPrice = userCart.totalPrice; 
-
-        
-        return res.status(200).json({ originalTotalPrice });
-    } catch (error) {
-        console.error('Error canceling coupon:', error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-},
 
 
 

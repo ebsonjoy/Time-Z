@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>WatchNest</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="/static/products/titleimg.jpg"
+    />
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="/static/User_assets/css/main.css?v=3.4" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+   
+  </head>
+
+  <body>
+    <!-- Quick view -->
+    <div
+      class="modal fade custom-modal"
+      id="quickViewModal"
+      tabindex="-1"
+      aria-labelledby="quickViewModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6 col-sm-12 col-xs-12">
+                <div class="detail-gallery">
+                  <span class="zoom-icon"><i class="fi-rs-search"></i></span>
+                  <!-- MAIN SLIDES -->
+                  <div class="product-image-slider">
+                    <figure class="border-radius-10">
+                      <img
+                        src="/static/User_assets/imgs/shop/product-16-2.jpg"
+                        alt="product image"
+                      />
+                    </figure>
+                    
+                  </div>
+                  <!-- THUMBNAILS -->
+                  <div class="slider-nav-thumbnails pl-15 pr-15">
+                    <div>
+                      <img
+                        src="/static/User_assets/imgs/shop/thumbnail-3.jpg"
+                        alt="product image"
+                      />
+                    </div>
+                    
+                  </div>
+                </div>
+                <!-- End Gallery -->
+                
+              </div>
+              <div class="col-md-6 col-sm-12 col-xs-12">
+                
+
+                <!-- Detail Info -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <header class="header-area header-style-1 header-height-1">
+      <!-- <div class="header-top header-top-ptb-1 d-none d-lg-block">
+        <div class="container">
+          <div class="row align-items-center">
+            
+            
+
+          </div>
+        </div>
+      </div> -->
+      <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
+        <div class="container">
+          <div class="header-wrap">
+            <div class="logo logo-width-1">
+              <a href="/">
+                <h1>WatchNest</h1>
+              </a>
+            </div>
+            <div class="header-right">
+              <div class="search-style-1">
+                <form action="/search" method="GET">
+                  <input type="text" name="q" placeholder="Search for items..." /> 
+                  <button type="submit"><i class="fi-rs-search"></i></button>
+                </form>
+              </div>
+              
+              <div class="header-action-right">
+                <div class="header-action-2">
+                  <div class="header-action-icon-2">
+                    <a href="/wishlist">
+                      <img class="svgInject" alt="Evara" src="/static/User_assets/imgs/theme/icons/icon-heart.svg" />
+                      <!-- <span class="pro-count blue">4</span> -->
+                    </a>
+                  </div>
+                  <div class="header-action-icon-2">
+                    <a class="mini-cart-icon" href="/shopCart">
+                      <img alt="Evara" src="/static/User_assets/imgs/theme/icons/icon-cart.svg" />
+                      <!-- <span class="pro-count blue">2</span> -->
+                    </a>
+                  </div>
+                  <div class="header-action-icon-2">
+                    <a class="mini-cart-icon" href="/usersProfileHome">
+                      <i class="fi-rs-user"></i>
+                      <!-- <img alt="Evara" src="/static/User_assets/imgs/theme/icons/userProfile.jpg" style="width: 70px; height: 40px;" /> -->  
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="header-bottom header-bottom-bg-color sticky-bar">
+        <div class="container">
+          <div class="header-wrap header-space-between position-relative">
+            <div class="logo logo-width-1 d-block d-lg-none">
+              <a href="/"
+                ><h1>WatchNest</h1>
+              </a>
+            </div>
+            <div class="header-nav d-none d-lg-flex">
+              <!-- <div class="main-categori-wrap d-none d-lg-block">
+                <a class="categori-button-active open" href="/shop">
+                  <span class="fi-rs-apps"></span> Browse Categories
+                </a>
+              </div> -->
+              <div
+                class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block"
+              >
+              <nav>
+                <ul>
+                  <li>
+                    <a class="active" href="/"
+                      >Home</a>
+                  </li>
+                  <li>
+                    <a href="/aboutUs">About</a>
+                  </li>
+                  <li>
+                    <a href="/shop">Shop</a>
+                  </li>
+                </ul>
+              </nav>
+              </div>
+            </div>
+
+
+            <div class="hotline d-none d-lg-block">
+              <ul>
+                <i class="fi-rs-sign-out mr-10"></i>
+
+                  <% if (user) { %>
+
+                   <a href="/userLogout">Logout</a>
+
+                  <% }else{ %>
+                    <a href="/userLogin">Login</a>
+                    <% } %>
+                  </ul>
+            </div>
+           
+            
+            <div class="header-action-right d-block d-lg-none">
+              <div class="header-action-2">
+                <div class="header-action-icon-2">
+                  <a href="/wishlist">
+                    <img
+                      alt="Evara"
+                      src="/static/User_assets/imgs/theme/icons/icon-heart.svg"
+                    />
+                    <!-- <span class="pro-count white">4</span> -->
+                  </a>
+                </div>
+                <div class="header-action-icon-2">
+                  <a class="mini-cart-icon" href="/shopCart">
+                    <img
+                      alt="Evara"
+                      src="/static/User_assets/imgs/theme/icons/icon-cart.svg"
+                    />
+                    <!-- <span class="pro-count white">2</span> -->
+                  </a>
+                  
+
+                </div>
+                <div class="header-action-icon-2 d-block d-lg-none">
+                  <div class="burger-icon burger-icon-white">
+                    <span class="burger-icon-top"></span>
+                    <span class="burger-icon-mid"></span>
+                    <span class="burger-icon-bottom"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="mobile-header-active mobile-header-wrapper-style">
+      <div class="mobile-header-wrapper-inner">
+        <div class="mobile-header-top">
+          <div class="mobile-header-logo">
+            <a href="/"
+              ><h1>WatchNest</h1></a>
+          </div>
+          <div
+            class="mobile-menu-close close-style-wrap close-style-position-inherit"
+          >
+            <button class="close-style search-close">
+              <i class="icon-top"></i>
+              <i class="icon-bottom"></i>
+            </button>
+          </div>
+        </div>
+        <div class="mobile-header-content-area">
+          <div class="mobile-search search-style-3 mobile-header-border">
+            <form action="/search" method="GET" class="mobile-search search-style-3 mobile-header-border">
+              <input type="text" name="q" placeholder="Search for items…" />
+              <button type="submit"><i class="fi-rs-search"></i></button>
+            </form>
+            
+          </div>
+          <div class="mobile-menu-wrap mobile-header-border">
+            <div class="main-categori-wrap mobile-header-border">
+              <a class="categori-button-active-2" href="#">
+                <span class="fi-rs-apps"></span> Browse Categories
+              </a>
+             
+            </div>
+            <!-- mobile menu start -->
+            <nav>
+              <ul class="mobile-menu">
+                <li class="menu-item-has-children">
+                  <span class="menu-expand"></span><a href="/">Home</a>
+                </li>
+                <li class="menu-item-has-children">
+                  <span class="menu-expand"></span
+                  ><a href="/shop">shop</a>
+                </li>
+                
+
+
+                <li class="menu-item-has-children">
+                  <span class="menu-expand"></span
+                  ><a href="blog-category-fullwidth.html">Blog</a>
+                  
+                </li>
+                <li class="menu-item-has-children">
+                  <span class="menu-expand"></span><a href="#">Pages</a>
+                  <ul class="dropdown">
+                    <li><a href="page-about.html">About Us</a></li>
+                    <li><a href="page-contact.html">Contact</a></li>
+                    <li><a href="page-account.html">My Account</a></li>
+                    <li>
+                      <a href="page-login-register.html">login/register</a>
+                    </li>
+                    <li>
+                      <a href="page-purchase-guide.html">Purchase Guide</a>
+                    </li>
+                    <li>
+                      <a href="page-privacy-policy.html">Privacy Policy</a>
+                    </li>
+                    <li><a href="page-terms.html">Terms of Service</a></li>
+                    <li><a href="page-404.html">404 Page</a></li>
+                  </ul>
+                </li>
+                <li class="menu-item-has-children">
+                  <span class="menu-expand"></span><a href="#">Language</a>
+                  <ul class="dropdown">
+                    <li><a href="#">English</a></li>
+                    <li><a href="#">French</a></li>
+                    <li><a href="#">German</a></li>
+                    <li><a href="#">Spanish</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+            <!-- mobile menu end -->
+          </div>
+          <div class="mobile-header-info-wrap mobile-header-border">
+            <div class="single-mobile-header-info mt-30">
+              <a href="page-contact.html"> Our location </a>
+            </div>
+            <div class="single-mobile-header-info">
+              <a href="page-login-register.html">Log In / Sign Up </a>
+            </div>
+            <div class="single-mobile-header-info">
+              <a href="#">(+01) - 2345 - 6789 </a>
+            </div>
+          </div>
+          <div class="mobile-social-icon">
+            <h5 class="mb-15 text-grey-4">Follow Us</h5>
+            <a href="#"
+              ><img
+                src="/static/User_assets/imgs/theme/icons/icon-facebook.svg"
+                alt=""
+            /></a>
+            <a href="#"
+              ><img
+                src="/static/User_assets/imgs/theme/icons/icon-twitter.svg"
+                alt=""
+            /></a>
+            <a href="#"
+              ><img
+                src="/static/User_assets/imgs/theme/icons/icon-instagram.svg"
+                alt=""
+            /></a>
+            <a href="#"
+              ><img
+                src="/static/User_assets/imgs/theme/icons/icon-pinterest.svg"
+                alt=""
+            /></a>
+            <a href="#"
+              ><img
+                src="/static/User_assets/imgs/theme/icons/icon-youtube.svg"
+                alt=""
+            /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <main class="main single-page">
+      <div class="page-header breadcrumb-wrap">
+          <div class="container">
+              <div class="breadcrumb">
+                  <a href="/" rel="nofollow">Home</a>
+                  <span></span> Pages
+                  <span></span> About us
+              </div>
+          </div>
+      </div>
+      <section class="section-padding">
+        <div class="container pt-25">
+            <div class="row">
+                <div class="col-lg-6 align-self-center mb-lg-0 mb-4">
+                    <h6 class="mt-0 mb-15 text-uppercase font-sm text-brand wow fadeIn animated">Our Company</h6>
+                    <h1 class="font-heading mb-40" style="font-size: 36px; font-weight: bold; color: #333; text-align: center;">WatchNest
+                      <span style="font-size: 24px; font-weight: normal; color: #666;"> -</span> Your Ultimate Watch Destination
+                  </h1>
+                  
+                    <p>Discover premium timepieces and connect with fellow enthusiasts at WatchNest. Explore our curated selection and join a vibrant community passionate about watches.</p>
+                </div>
+                <div class="col-lg-6">
+                  <img src="/static/products/Home.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+      <section id="team" class="pt-25 wow fadeIn animated">
+          <div class="container">
+              <div class="row mb-50 align-items-center">
+                  <div class="col-md-6">
+                     
+                      <h2 class="mb-15 wow fadeIn animated">Meet Our Team</h2>
+                      <p class="text-grey-3 wow fadeIn animated">Meet the talented individuals behind WatchNest, dedicated to bringing you the best in horology.</p>
+                  </div>
+                  <div class="col-md-6 text-md-end mt-30">
+                      <a class="btn btn-outline btn-lg btn-brand-outline font-weight-bold text-brand text-hover-white border-radius-5 btn-shadow-brand hover-up">All Members</a>
+                  </div>
+              </div>
+              <div class="position-relative">
+                  <div class="row wow fadeIn animated">
+                      <div class="col-lg-3 col-md-6">
+                          <div class="blog-card border-radius-10 overflow-hidden text-center">
+                              <img src="/static/products/one.webp" alt="" class="border-radius-10 mb-30 hover-up">
+                              <h4 class="fw-500 mb-0">Alexander Johnson</h4>
+                              <p class="fw-400 text-brand mb-10">CEO & Co-Founder</p>
+                              <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0 animated">
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                              </div>
+                          </div>
+                      </div>
+                      <!--col-->
+                      <div class="col-lg-3 col-md-6">
+                          <div class="blog-card border-radius-10 overflow-hidden text-center">
+                              <img src="/static/products/two.webp" alt="" class="border-radius-10 mb-30 hover-up">
+                              <h4 class="fw-500 mb-0">Christopher Thompson</h4>
+                              <p class="fw-400 text-brand mb-10">Head Engineer</p>
+                              <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0 animated">
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                              </div>
+                          </div>
+                      </div>
+                      <!--col-->
+                      <div class="col-lg-3 col-md-6">
+                          <div class="blog-card border-radius-10 overflow-hidden text-center">
+                              <img src="/static/products/three.webp" alt="" class="border-radius-10 mb-30 hover-up">
+                              <h4 class="fw-500 mb-0">Benjamin Williams</h4>
+                              <p class="fw-400 text-brand mb-10">Senior Planner</p>
+                              <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0 animated">
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                              </div>
+                          </div>
+                      </div>
+                      <!--col-->
+                      <div class="col-lg-3 col-md-6">
+                          <div class="blog-card border-radius-10 overflow-hidden text-center">
+                              <img src="/static/products/fourr.webp" alt="" class="border-radius-10 mb-30 hover-up">
+                              <h4 class="fw-500 mb-0">Nathaniel Martinez</h4>
+                              <p class="fw-400 text-brand mb-10">Project Manager</p>
+                              <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0 animated">
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                                  <a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                              </div>
+                          </div>
+                      </div>
+                      <!--col-->
+                  </div>
+              </div>
+          </div>
+      </section>
+      <section id="work" class="mt-40 pt-50 pb-50 section-border">
+        <div class="container">
+            <div class="row mb-50">
+                <div class="col-lg-12 col-md-12 text-center">
+                    <h6 class="mt-0 mb-5 text-uppercase text-brand font-sm wow fadeIn animated">WatchNest</h6>
+                    <h2 class="mb-15 text-grey-1 wow fadeIn animated">Explore Our Global Presence</h2>
+                    <p class="w-50 m-auto text-grey-3 wow fadeIn animated">Discover our main branches around the world, bringing premium timepieces closer to you.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 text-center mb-md-0 mb-4">
+                    <img class="btn-shadow-brand hover-up border-radius-10 bg-brand-muted wow fadeIn animated" src="/static/products/l1.jpeg" alt="">
+                    <h4 class="mt-30 mb-15 wow fadeIn animated">New Delhi, India</h4>
+                    <p class="text-grey-3 wow fadeIn animated">27 Division St, New Delhil<br>ND 10002, India</p>
+                </div>
+                <div class="col-md-4 text-center mb-md-0 mb-4">
+                    <img class="btn-shadow-brand hover-up border-radius-10 bg-brand-muted wow fadeIn animated" src="/static/products/l2.jpeg" alt="">
+                    <h4 class="mt-30 mb-15 wow fadeIn animated">Paris, France</h4>
+                    <p class="text-grey-3 wow fadeIn animated">22 Rue des Carmes<br>75005 Paris, France</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <img class="btn-shadow-brand hover-up border-radius-10 bg-brand-muted wow fadeIn animated" src="/static/products/l3.jpeg" alt="">
+                    <h4 class="mt-30 mb-15 wow fadeIn animated">Jakarta, Indonesia</h4>
+                    <p class="text-grey-3 wow fadeIn animated">2476 Raya Yogyakarta,<br>89090 Indonesia</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="testimonials" class="section-padding">
+      <div class="container pt-25">
+          <div class="row mb-50">
+              <div class="col-lg-12 col-md-12 text-center">
+                  <h6 class="mt-0 mb-10 text-uppercase text-brand font-sm wow fadeIn animated">Customer Reviews</h6>
+                  <h2 class="mb-15 text-grey-1 wow fadeIn animated">See What<br> Our Clients Are Saying</h2>
+                  <p class="w-50 m-auto text-grey-3 wow fadeIn animated">Here's what some of our valued customers have to say about their experience with us.</p>
+              </div>
+          </div>
+          <div class="row align-items-center">
+              <div class="col-md-6 col-lg-4">
+                  <div class="hero-card box-shadow-outer-6 wow fadeIn animated mb-30 hover-up d-flex">
+                      <div class="hero-card-icon icon-left-2 hover-up">
+                          <img class="btn-shadow-brand hover-up border-radius-5 bg-brand-muted" src="/static/products/r1.webp" alt="">
+                      </div>
+                      <div class="pl-30">
+                          <h5 class="mb-5 fw-500">S. Johnson</h5>
+                          <p class="font-sm text-grey-5">Tech Innovations Inc.</p>
+                          <p class="text-grey-3">"Excellent customer service and a wide range of products. Will definitely shop here again!"</p>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                  <div class="hero-card box-shadow-outer-6 wow fadeIn animated mb-30 hover-up d-flex">
+                      <div class="hero-card-icon icon-left-2 hover-up">
+                          <img class="btn-shadow-brand hover-up border-radius-5 bg-brand-muted" src="/static/products/r2.webp" alt="">
+                      </div>
+                      <div class="pl-30">
+                          <h5 class="mb-5 fw-500">M. Watson</h5>
+                          <p class="font-sm text-grey-5">Tech Savvy Ltd.</p>
+                          <p class="text-grey-3">"I am impressed with the quality of the watches and the efficiency of the delivery process."</p>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                  <div class="hero-card box-shadow-outer-6 wow fadeIn animated mb-30 hover-up d-flex">
+                      <div class="hero-card-icon icon-left-2 hover-up">
+                          <img class="btn-shadow-brand hover-up border-radius-5 bg-brand-muted" src="/static/products/r3.webp" alt="">
+                      </div>
+                      <div class="pl-30">
+                          <h5 class="mb-5 fw-500">E. Anderson</h5>
+                          <p class="font-sm text-grey-5">Gadget Guru Co.</p>
+                          <p class="text-grey-3">"The shopping experience was smooth and hassle-free. Found the perfect watch for my needs!"</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row mt-30">
+              <div class="col-12 text-center">
+                  <p class="wow fadeIn animated">
+                      <a class="btn btn-brand text-white btn-shadow-brand hover-up btn-lg">View More</a>
+                  </p>
+              </div>
+          </div>
+      </div>
+  </section>
+  
+  
+      <section class="section-padding">
+          <div class="container pb-25">
+              <h3 class="section-title mb-20 wow fadeIn animated text-center"><span>Featured</span> Clients</h3>
+              <div class="carausel-6-columns-cover position-relative wow fadeIn animated">
+                  <div class="carausel-6-columns text-center" id="carausel-6-columns-3">
+                      <div class="brand-logo">
+                          <img class="img-grey-hover" src="assets/imgs/banner/brand-1.png" alt="">
+                      </div>
+                      <div class="brand-logo">
+                          <img class="img-grey-hover" src="assets/imgs/banner/brand-2.png" alt="">
+                      </div>
+                      <div class="brand-logo">
+                          <img class="img-grey-hover" src="assets/imgs/banner/brand-3.png" alt="">
+                      </div>
+                      <div class="brand-logo">
+                          <img class="img-grey-hover" src="assets/imgs/banner/brand-4.png" alt="">
+                      </div>
+                      <div class="brand-logo">
+                          <img class="img-grey-hover" src="assets/imgs/banner/brand-5.png" alt="">
+                      </div>
+                      <div class="brand-logo">
+                          <img class="img-grey-hover" src="assets/imgs/banner/brand-6.png" alt="">
+                      </div>
+                      <div class="brand-logo">
+                          <img class="img-grey-hover" src="assets/imgs/banner/brand-3.png" alt="">
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </section>
+  </main>  
+    
+    <footer class="main">
+      <section class="newsletter p-30 text-white wow fadeIn animated" style=" background-color:black">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-7 mb-md-3 mb-lg-0">
+              <div class="row align-items-center">
+                <div class="col flex-horizontal-center">
+                  <h4 class="font-size-20 mb-0 ml-3">Sign up </h4>
+                </div>
+                <div class="col my-4 my-md-0 des">
+                  
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <!-- Subscribe Form -->
+              <form class="form-subcriber d-flex wow fadeIn animated">
+                <input
+                  type="email"
+                  class="form-control bg-white font-small"
+                  placeholder="Enter your email"
+                />
+                <a class="btn bg-dark text-white" type="submit" href="/userSginup">
+                  Signup
+                </a>
+              </form>
+              <!-- End Subscribe Form -->
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section-padding footer-mid">
+        <div class="container pt-15 pb-20">
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <div class="widget-about font-md mb-md-5 mb-lg-0">
+                <div class="logo logo-width-1 wow fadeIn animated">
+                  <a href="/"
+                    ><h1>WatchNest</h1></a>
+                </div>
+                <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">
+                  Contact
+                </h5>
+                <p class="wow fadeIn animated">
+                  <strong>Address: </strong>27 Division St, New Delhil,ND 10002, India
+                </p>
+                <p class="wow fadeIn animated">
+                  <strong>Phone: </strong>+91 9747277777
+                </p>
+                <p class="wow fadeIn animated">
+                  <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
+                </p>
+                <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">
+                  Follow Us
+                </h5>
+                <div
+                  class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0"
+                >
+                  <a href="#"
+                    ><img
+                      src="/static/User_assets/imgs/theme/icons/icon-facebook.svg"
+                      alt=""
+                  /></a>
+                  <a href="#"
+                    ><img
+                      src="/static/User_assets/imgs/theme/icons/icon-twitter.svg"
+                      alt=""
+                  /></a>
+                  <a href="#"
+                    ><img
+                      src="/static/User_assets/imgs/theme/icons/icon-instagram.svg"
+                      alt=""
+                  /></a>
+                  <a href="#"
+                    ><img
+                      src="/static/User_assets/imgs/theme/icons/icon-pinterest.svg"
+                      alt=""
+                  /></a>
+                  <a href="#"
+                    ><img
+                      src="/static/User_assets/imgs/theme/icons/icon-youtube.svg"
+                      alt=""
+                  /></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-3">
+              <h5 class="widget-title wow fadeIn animated">About</h5>
+              <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Delivery Information</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms &amp; Conditions</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Support Center</a></li>
+              </ul>
+            </div>
+            <div class="col-lg-3 col-md-3">
+              <h5 class="widget-title wow fadeIn animated">My Account</h5>
+              <ul class="footer-list wow fadeIn animated">
+                <li><a href="/userSginup">Sign In</a></li>
+                <li><a href="/shopCart">View Cart</a></li>
+                <li><a href="/wishlist">My Wishlist</a></li>
+                <li><a href="/usersProfileHome">Account</a></li>
+                <li><a href="/ordersProfile">Order</a></li>
+              </ul>
+            </div>
+           
+          </div>
+        </div>
+      </section>
+      
+    </footer>
+  
+    
+   
+
+</script>
+    <script src="/static/User_assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="/static/User_assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="/static/User_assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="/static/User_assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="/static/User_assets/js/plugins/slick.js"></script>
+    <script src="/static/User_assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="/static/User_assets/js/plugins/wow.js"></script>
+    <script src="/static/User_assets/js/plugins/jquery-ui.js"></script>
+    <script src="/static/User_assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="/static/User_assets/js/plugins/magnific-popup.js"></script>
+    <script src="/static/User_assets/js/plugins/select2.min.js"></script>
+    <script src="/static/User_assets/js/plugins/waypoints.js"></script>
+    <script src="/static/User_assets/js/plugins/counterup.js"></script>
+    <script src="/static/User_assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="/static/User_assets/js/plugins/images-loaded.js"></script>
+    <script src="/static/User_assets/js/plugins/isotope.js"></script>
+    <script src="/static/User_assets/js/plugins/scrollup.js"></script>
+    <script src="/static/User_assets/js/plugins/jquery.vticker-min.js"></script>
+    <script src="/static/User_assets/js/plugins/jquery.theia.sticky.js"></script>
+    <script src="/static/User_assets/js/plugins/jquery.elevatezoom.js"></script>
+    <!-- Template  JS -->
+    <script src="/static/User_assets/js/main.js?v=3.4"></script>
+    <script src="/static/User_assets/js/shop.js?v=3.4"></script>
+    
+  </body>
+</html>

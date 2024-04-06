@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Dashboard</title>
+    <title>WatchNest</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +12,11 @@
     <meta property="og:url" content="">
     <meta property="og:image" content="">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="/static/assets/imgs/theme/favicon.svg">
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="/static/products/titleimg.jpg"
+    />
     <!-- Template CSS -->
     <link href="/static/assets/css/main.css" rel="stylesheet" type="text/css" />
 </head>
@@ -21,7 +25,7 @@
     <div class="screen-overlay"></div>
     <aside class="navbar-aside" id="offcanvas_aside">
         <div class="aside-top">
-            <h1 class="brand-wrap">TimeZ</h1>
+            <h1 class="brand-wrap">WatchNest</h1>
             <div>
                 <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
             </div>
@@ -136,7 +140,7 @@
                 <div class="container">
                     <div class="card mb-4">
                         <article class="card-body">
-                            <h5 class="card-title">Order Statistics</h5>
+                            <h5 class="card-title">Payment Statistics</h5>
                             <canvas id="orderChart" height="120px"></canvas>
             
                         </article>
@@ -271,20 +275,7 @@
 
 
         </section> <!-- content-main end// -->
-        <footer class="main-footer font-xs">
-            <div class="row pb-30 pt-15">
-                <div class="col-sm-6">
-                    <script>
-                    document.write(new Date().getFullYear())
-                    </script> ©, Evara - HTML Ecommerce Template .
-                </div>
-                <div class="col-sm-6">
-                    <div class="text-sm-end">
-                        All rights reserved
-                    </div>
-                </div>
-            </div>
-        </footer>
+        
     </main>
     <script src="/static/assets/js/vendors/jquery-3.6.0.min.js"></script>
 
@@ -510,89 +501,7 @@
     })   
       </script>
    
-<!-- 
-    <script>
-       $(document).ready(function () {
-  $('#yearlyReportButton').click(function () {
-    const currentDate = new Date();
-    const yearStart = new Date(currentDate.getFullYear(), 0, 1).toISOString().split('T')[0];
-    const yearEnd = new Date(currentDate.getFullYear(), 11, 31).toISOString().split('T')[0];
-    $('#startDate').val(yearStart);
-    $('#endDate').val(yearEnd);
-  });
 
-  $('#weeklyReportButton').click(function () {
-    const currentDate = new Date();
-    const weekStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay()).toISOString().split('T')[0];
-    const weekEnd = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - currentDate.getDay() + 6).toISOString().split('T')[0];
-    $('#startDate').val(weekStart);
-    $('#endDate').val(weekEnd);
-  });
-
-  $('#dayReportButton').click(function () {
-    const currentDate = new Date();
-    const dayStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 0, 0, 0).toISOString().split('T')[0];
-    const dayEnd = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), 23, 59, 59).toISOString().split('T')[0];
-    $('#startDate').val(dayStart);
-    $('#endDate').val(dayEnd);
-});
-
-  
-
-  $('#createReportButton').click(function () {
-    $.ajax({
-      url: '/generate-report',
-      type: 'POST',
-      data: {
-        startDate: $('#startDate').val(),
-        endDate: $('#endDate').val()
-      },
-      success: function (response) {
-        console.log(response);
-        $('#reportTableBody').empty();
-        response.reportData.forEach((order, index) => {
-          let productsHTML = '';
-          order.products.forEach(product => {
-            productsHTML += `<li>${product.productName} - ${product.quantity} - ${product.price}</li>`;
-          });
-
-          let row = `<tr>
-                                  <td>${index + 1}</td>
-                                  <td>#${order.orderId}</td>
-                                  <td>${new Date(order.date).toLocaleDateString()}</td>
-                                  <td>$${order.totalPrice.toFixed(2)}</td>
-                                  <td>${order.firstName}</td>
-                                  <td>${order.address}</td>
-                                  <td>${order.paymentMethod}</td>
-                                  <td>${order.paymentStatus}</td>
-                                  <td><ul>${productsHTML}</ul></td>
-                              </tr>`;
-          $('#reportTableBody').append(row);
-        });
-        $('#reportContainer').show();
-        $('#downloadButton').show();
-        $('#downloadExcelButton').show();
-      },
-      error: function (xhr, status, error) {
-        console.error(error);
-      }
-    });
-  });
-});
-
-function downloadPdf() {
-  const element = document.getElementById('reportTableBody')
-  console.log(element);
-  html2pdf().from(element).save();
-}
-
-function downloadExcel() {
-  const element = document.getElementById('reportTableBody');
-  const wb = XLSX.utils.table_to_book(element);
-  XLSX.writeFile(wb, 'report.xlsx');
-}
-
-    </script> -->
 
     <script src="/static/assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/static/assets/js/vendors/select2.min.js"></script>

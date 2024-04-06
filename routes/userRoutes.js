@@ -15,7 +15,6 @@ const walletController = require('../controller/walletController')
 
 
 router.get("/",userController.userHomePage);
-// router.get("/:page?", userController.userHomePage);
 router.get("/userLogin",userController.userLoginPage);
 router.post('/userLoginPost',userController.userLoginPost);
 router.get("/userSginup",userController.userSignup);
@@ -36,7 +35,7 @@ router.get("/google/callback",authController.googleAuthCallback);
 // ------------------------------------------------------------------------------
 
 // Shop, View Details
-// router.get("/shop",userController.userShop);
+
 router.get("/viewDetails/:id",userController.viewDetails);
 router.get("/shop/:page?", userController.userShop);
 
@@ -49,12 +48,10 @@ router.post("/changePassword/:id",userController.changePassword); //Change Passw
 
 // Order
 router.get("/ordersProfile",userController.ordersProfile);
-router.get('/orderTrack/:id',userController.orderTrack)
-// router.get('/cancelOrder/:id', userController.cancelOrder);
-// router.get('/returnOrder/:id', userController.returnOrder);
-router.patch('/orderTrackCancelOrder',userController.orderTrackCancelOrder)
-router.patch('/orderTrackReturnOrder',userController.orderTrackReturnOrder)
-// router.get('/orderRetry/:orderId',userController.orderRetryToCheckOut)
+router.get('/orderTrack/:id',userController.orderTrack);
+router.patch('/orderTrackCancelOrder',userController.orderTrackCancelOrder);
+router.patch('/orderTrackReturnOrder',userController.orderTrackReturnOrder);
+
 
 
 
@@ -65,7 +62,7 @@ router.post("/addressSubmit",addressController.addressPost)
 router.get("/editAddress/:id",addressController.editAddress)
 router.post("/updateAddressPost/:id",addressController.updateAddressPost)
 router.get("/deleteAddress/:id",addressController.deleteAddress)
-
+// checkOutAddress
 router.get("/addressAddCheckOut",addressController.addressAddCheckOut)
 router.post("/addressSubmitCheckOut",addressController.addressSubmitCheckOut)
 
@@ -74,7 +71,7 @@ router.get("/shopCart",cartController.shopCart)
 router.get("/addTocart/:id",cartController.addTocart)
 
 // checkOut
-// router.get("/checkOut",cartController.checkOut)
+
 // Retry Orders && checkOut
 router.get("/checkOut",cartController.checkOut)
 router.post('/updateQuantity',cartController.updateQuantity)
@@ -96,12 +93,6 @@ router.get('/deleteWishlistProduct/:id',wishlistController.deleteWishlistProduct
 router.get('/search',userController.searchProduct)
 
 // wallet
-
-// router.get('/user/wallet', walletController.userWallet);
-// router.post('/addFunds', walletController.addFunds);
-// router.post('/withdrawFunds', walletController.withdrawFunds);
-// router.post('/clearHistory', walletController.clearHistory);
-
 router.get('/user/wallet', walletController.userWallet);
 router.post('/addFunds', walletController.addFunds);
 router.post('/withdrawFunds', walletController.withdrawFunds);
@@ -110,12 +101,13 @@ router.get('/check-wallet-balance', walletController.checkWalletBalance);
 
 // Coupon
 router.patch('/checkCoupon', cartController.checkCoupon);
-router.post('/cancel-coupon', cartController.cancelCoupon);
+
 
 // Invoice
 router.get('/Invoice/:orderId',userController.getOrderInvoice)
 
-router.get("/contactUs",userController.contactUs)
+
+router.get('/aboutUs',userController.aboutUs)
 
 
 

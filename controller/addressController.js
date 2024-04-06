@@ -23,7 +23,7 @@ const addressController = {
     },
     addAddress:async(req,res)=>{
         const userId = req.session.userID
-        // const data = await Address.findById({ userId:userId  });
+        
         res.render("users/addAddress",{ user:req.session.user})
     },
     addressPost: async (req, res) => {
@@ -78,10 +78,10 @@ const addressController = {
                 return;
             }
             
-            // Find the index of the address to update in the addressDetails array
+            
             const addressIndex = addressDocument.addressDetails.findIndex(address => address._id.toString() === id);
             
-            // Update the address details at the found index
+            
             addressDocument.addressDetails[addressIndex].address = req.body.address;
             addressDocument.addressDetails[addressIndex].street = req.body.street;
             addressDocument.addressDetails[addressIndex].city = req.body.city;
@@ -89,7 +89,7 @@ const addressController = {
             addressDocument.addressDetails[addressIndex].zip = req.body.zip;
             addressDocument.addressDetails[addressIndex].country = req.body.country;
     
-            // Save the updated document
+            
             await addressDocument.save();
     
             res.redirect('/myAddress');
@@ -102,7 +102,7 @@ const addressController = {
         const id = req.params.id;
 
         try{
-            // Find the document containing the address details
+            
               const addressDocument = await Address.findOne({ 'addressDetails._id': id });
 
              if (!addressDocument) {
@@ -110,13 +110,13 @@ const addressController = {
                return;
               }
 
-          // Use $pull to remove the matching address from the addressDetails array
+          
              await Address.updateOne(
                { _id: addressDocument._id },
                { $pull: { addressDetails: { _id: id } } }
            );
 
-          // After deleting the address, you might want to redirect the user to a different page
+          
                   res.redirect('/myAddress');
 
         }catch(err){
@@ -125,8 +125,7 @@ const addressController = {
         }
         
     },addressAddCheckOut:async(req,res)=>{
-        // const userId = req.session.userID
-        // const data = await Address.findById({ userId:userId  });
+        
         res.render("users/addAddressCheckOut",{ user:req.session.user})
     },
 

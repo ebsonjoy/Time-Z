@@ -51,6 +51,11 @@ const adminCategoryController = {
     },
     adminUpdateCategory:async (req,res)=>{
         const id = req.params.id;
+        const categ = await Category.findById(id);
+        const existingcategory = await Category.findOne({category: req.body.category});
+        if(existingcategory){
+            res.render('admin/editcategory',{alert:"Category is already exists, Please try with another one",categ:categ });
+       }else{
         try{
             const result = await Category.findByIdAndUpdate(id,{
                 category:req.body.category,
@@ -61,6 +66,7 @@ const adminCategoryController = {
             console.error(err);
             res.json({message : err.message , type :"danger" })
         }
+    }
     },
     CategoryList:async (req,res)=>{
         const id = req.params.id;

@@ -55,10 +55,7 @@ const orderSchema = new mongoose.Schema({
         type: String,
         default: 'pending'
     },
-    // orderStatus: {
-    //     type: String,
-    //     default: 'Pending'
-    // },
+    
     orderDate: {
         type: Date,
         default: Date.now,

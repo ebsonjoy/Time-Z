@@ -13,8 +13,8 @@ const Products = require('../models/products')
 
 // admin login
 const credential ={
-    email:"admin@gmail.com",
-    password:"12345",
+    email:process.env.CREDENTIAL_EMAIL,
+    password:process.env.CREDENTIAL_PASSWORD,
 
 };
 
@@ -25,7 +25,7 @@ const adminController={
         if(!req.session.admin){
         res.render("admin/login");
         }else{
-            res.render('admin/dashboard')
+            res.redirect('/dashboard')
         }
     },
 
@@ -40,35 +40,7 @@ const adminController={
         }
        
     },
-    // adminDashboard: async (req, res) => {
-    //     if (!req.session.admin) {
-    //         res.render("admin/login");
-    //     } else {
-    //         try {
-    //             const ordersCount = await Order.countDocuments({});
-    //             const customers = await User.countDocuments({});
-    //             const productsCount = await Products.countDocuments({})
-
-                
-    //             const Revenue = await Order.aggregate([
-    //                 {
-    //                     $group: {
-    //                         _id: null,
-    //                         totalAmount: { $sum: "$totalPrice" }
-    //                     }
-    //                 }
-    //             ]);
     
-    //             // Extracting total revenue from the aggregation result
-    //             const totalRevenue = Revenue.length > 0 ? Revenue[0].totalAmount : 0;
-    
-    //             res.render('admin/dashboard', { ordersCount, totalRevenue,customers,productsCount });
-    //         } catch (error) {
-    //             console.error("Error:", error);
-    //             res.status(500).send("Internal Server Error");
-    //         }
-    //     }
-    // },
     adminLogout:(req,res)=>{
         if(req.session.admin){
             req.session.admin = null;
@@ -166,7 +138,7 @@ const adminController={
                     }
                 ]);
     
-                // Extracting total revenue from the aggregation result
+                
                 const totalRevenue = Revenue.length > 0 ? Revenue[0].totalAmount : 0;
     
                 res.render('admin/statistics', { ordersCount, totalRevenue,customers,productsCount });
