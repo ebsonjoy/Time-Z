@@ -46,23 +46,10 @@ const authController = {
     scope: ['profile', 'email'],
   }),
 
-  googleAuthCallback: (req, res, next) => {
-    passport.authenticate('google', (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return res.redirect('/userLogin');
-      }
-      req.logIn(user, (err) => {
-        if (err) {
-          return next(err);
-        }
-        req.session.userID = user._id;
-        return res.redirect('/');
-      });
-    })(req, res, next);
-  },
+  googleAuthCallback: passport.authenticate('google', {
+    failureRedirect: '/userLogin',
+    successRedirect: '/', // Redirect to your dashboard or home page
+  }),
 };
 
 module.exports = authController;

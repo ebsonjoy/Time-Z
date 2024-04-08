@@ -1,6 +1,7 @@
 
 const Order = require('../models/order');
 const products = require('../models/products')
+const Wallet = require('../models/wallet')
 
 const adminOrderController = {
 
@@ -75,6 +76,11 @@ const adminOrderController = {
             const { productId, orderId } = req.body; 
     
             const order = await Order.findOne({ _id: orderId });
+            const userId = order.userId;
+
+            let amount;
+            let finalAmount;
+            let nonCancelledItemCount = 0;
     
             if (!order) {
                 return res.status(404).json({ message: 'Order not found' });
@@ -87,6 +93,37 @@ const adminOrderController = {
     
             if (newStatus === "Cancelled") {
                 await products.findByIdAndUpdate(productOne, { $inc: { stock: returnProduct.quantity } });
+                for (const item of order.items) {
+                    if (item.orderStatus !== 'Cancelled') {
+                        nonCancelledItemCount++;
+                    }
+                    if (nonCancelledItemCount > 1) {
+                        break;
+                    }
+                }
+
+                if (nonCancelledItemCount === 1) {
+                    // console.log("Only one item not cancelled");
+                    amount = returnProduct.price * returnProduct.quantity+60
+                } else {
+                   
+                    amount = returnProduct.price * returnProduct.quantity
+                }
+                if(order.couponDiscount>0){
+                    divideCouponAmount = order.couponDiscount / order.items.length
+                    finalAmount = amount-divideCouponAmount;
+                }else{
+                    finalAmount = amount;
+                }
+
+                if(order.paymentStatus === 'Paid'){
+                   
+                            const wallet = await Wallet.findOneAndUpdate({ userId: userId }, {
+                                $inc: { balance: finalAmount },
+                                $push: { transactionHistory: { amount:finalAmount, type: 'deposit', description: "Amount refunded through cancellation of one product" } }
+                            }, { new: true });
+                }
+
             }
     
             const statusProduct = order.items.find(product => product._id.toString() === productId);
