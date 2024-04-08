@@ -5,7 +5,6 @@ const nodemailer = require('nodemailer');
 require("dotenv").config();
 const {genaratorOpt} = require("../optgenarator");
 const products = require('../models/products');
-
 const Order = require('../models/order');
 const Category = require('../models/category')
 const Wallet = require('../models/wallet')
@@ -135,7 +134,7 @@ const userController = {
               }
             }
           ]);
-      
+          req.session.blockCheckout = false;
           res.render('users/Homepage', { prod: prod, user: req.session.user });
         } catch (error) {
           console.error('Error fetching data:', error);

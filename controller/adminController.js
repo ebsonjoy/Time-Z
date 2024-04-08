@@ -158,6 +158,7 @@ const adminController={
     UserBlock:async (req,res)=>{
         const id = req.params.id;
         const user = await User.findByIdAndUpdate(id,{isblocked:false});
+        req.session.user = null
         res.redirect('/customer')
     },
     UserUnblock:async (req,res)=>{

@@ -26,6 +26,18 @@ href="/static/products/titleimg.jpg"
     <!-- Template CSS -->
     <link rel="stylesheet" href="/static/User_assets/css/main.css?v=3.4" />
 
+    <!-- <style>
+      .custom-alert {
+          background-color: #f8d7da;
+          border: 1px solid #f5c6cb;
+          color: #721c24;
+          padding: 0.75rem 1.25rem;
+          margin-bottom: 0;
+          border-radius: 0.25rem;
+      }
+  </style> -->
+  
+
 
     <!-- coupons -->
     <style>
@@ -841,7 +853,14 @@ href="/static/products/titleimg.jpg"
                                   </div> 
                                   <% if (!address || !address.addressDetails || address.addressDetails.length ===0 ) { %>
                                     <a href="/addressAddCheckOut" class="btn btn-fill-out submit">Add Address</a>
-
+                                    <!-- <div class="text-center mb-3"> -->
+                                      <div id="addressError" style="display: none; background-color: #ffffff; border: 1px solid #ffffff; color: #b71d2c; padding: 10px; border-radius: 5px; font-family: Arial, sans-serif; font-size: 16px;">
+                                          <strong>Error:</strong> Please add an address.
+                                      </div>
+                                  <!-- </div> -->
+                                  
+                                  
+                                  
                                   <% } else { %>
                                         <% address.addressDetails.forEach((address,index) => { %>
                                             <div class="address-box" id="address<%= index + 1 %>">
@@ -1012,7 +1031,7 @@ href="/static/products/titleimg.jpg"
                                   </div>
                               </div>
                               
-                                    <div id="check-error" class="alert alert-success mt-4" style="color: black; font-weight: 500; display: none;">
+                                    <div id="check-error"  style="display: none; background-color: #ffffff; border: 1px solid #ffffff; color: #b71d2c; padding: 10px; border-radius: 5px; font-family: Arial, sans-serif; font-size: 16px; display: none;">
                                         Please select a payment method before placing the order.
                                     </div>
                                 </div>
@@ -1022,8 +1041,6 @@ href="/static/products/titleimg.jpg"
                             </div>
                           </div>
                         </div>
-
-                        
 
               </form>
              
@@ -1149,6 +1166,32 @@ href="/static/products/titleimg.jpg"
       </section>
       
     </footer>
+    <script>
+      function validateAddress() {
+         
+          var addressCount = document.querySelectorAll('.address-box').length;
+  
+          
+          if (addressCount === 0) {
+              var errorMessage = document.getElementById('addressError');
+              if (errorMessage) {
+                  errorMessage.innerHTML = 'Please add an address.';
+                  errorMessage.style.display = 'block'; 
+                  setTimeout(()=>{
+                    errorMessage.style.display = 'none'; 
+                  },3000)
+              }
+              return false; 
+          } else {
+              
+              // document.getElementById('addressError').style.display = 'none';
+               validateForm(); 
+          }
+      }
+  </script>
+
+
+
     <script>
       setTimeout(() => {
       document.getElementById("alert").style.display = "none";
@@ -1308,8 +1351,7 @@ href="/static/products/titleimg.jpg"
 
   document.getElementById("orderForm").addEventListener("submit", function (event) {
     event.preventDefault();
-
-    validateForm();
+    validateAddress()
   });
   
 
@@ -1475,6 +1517,9 @@ async function removeCoupon(params) {
 
 
   </script>
+
+  
+
 
 
     <!-- Vendor JS-->

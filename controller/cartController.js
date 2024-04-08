@@ -9,7 +9,6 @@ const Coupon = require('../models/coupon');
 
 
 
-
 const cartController = {
     shopCart: async (req, res) => {
        
@@ -58,9 +57,13 @@ addTocart:async(req,res)=>{
     }
 },
 checkOut: async(req,res)=>{
-
     const itemId = req.query.itemId; 
-    const userId = req.session.userID
+    const userId = req.session.userID;
+
+    if(req.session.blockCheckout){
+        req.session.blockCheckout = false;
+        res.redirect('/')
+    }else{
 
     if (itemId) {
         const order = await Order.findById(itemId).populate({
@@ -123,11 +126,8 @@ checkOut: async(req,res)=>{
          coupons:validCoupons,
          razorpayKey: process.env.RAZORPAY_KEY,
         })
-    }
-
-
-    
-   
+    } 
+}  
 },
 updateQuantity : async (req, res) => {
     try {
@@ -300,8 +300,9 @@ orderPost:async (req, res) => {
                 return res.status(400).json({ error: 'Please select a valid address' });
             }
         }
-
+        req.session.blockCheckout = true;
         res.redirect('/orderConform');
+        
 
     } catch (err) {
         console.error("Error placing order:", err);
