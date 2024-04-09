@@ -48,7 +48,7 @@ const authController = {
 
   googleAuthCallback: passport.authenticate('google', {
     failureRedirect: '/userLogin',
-    successRedirect: '/', // Redirect to your dashboard or home page
+    successRedirect: '/', 
   }),
 };
 
