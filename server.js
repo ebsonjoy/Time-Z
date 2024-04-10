@@ -24,7 +24,7 @@ app.use(express.urlencoded({extended:true}));
 app.set("view engine","ejs");
 
 app.use("/static",express.static(path.join(__dirname,'public')));
-app.use('/temp',express.static('temp'))
+// app.use('/temp',express.static('temp'))
 app.use(session({
     secret:uuidv4(),
     resave:false,

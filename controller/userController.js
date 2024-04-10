@@ -498,7 +498,7 @@ const userController = {
         }
         
         if (nonCancelledItemCount === 1) {
-            // console.log("Only one item not cancelled");
+            // console.log("Only one item not cancell");
             amount = cancelProduct.price * cancelProduct.quantity+60
         } else {
            

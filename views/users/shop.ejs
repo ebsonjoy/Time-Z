@@ -628,11 +628,22 @@
                                         <span class="old-price">₹<%= row.oldprice %></span>
                                     </div>
                                     <h2><a href="/viewDetails/<%= row._id%>">View Details</a></h2>
-                                    <div class="product-action-1 show">
+                                    <% if (user) { %>
+                                      <div class="product-action-1 show">
                                         <button aria-label="Add To Cart" class="action-btn hover-up" onclick="cart('<%=row.id %>')">
                                             <i class="fi-rs-shopping-bag-add"></i>
                                         </button>
                                     </div>
+                                    <% }else{ %>
+                                      <div class="product-action-1 show">
+                                        <button
+                                          aria-label="Add To Cart"
+                                          class="action-btn hover-up"
+                                          onclick="login()"
+                                          ><i class="fi-rs-shopping-bag-add"></i
+                                        ></button>                            
+                                      </div> 
+                                    <% } %>
                                 </div>
                             </div>
                         </div>
@@ -812,12 +823,27 @@
           icon:"success",
           title: "Successfully add to cart!",
           showCancelButton: false,
-          confirmButtonColor: "#3085d6",
+          confirmButtonColor: "#000000",
           cancelButtonColor: "#d33",
           confirmButtonText: "ok"
         }).then((result) => {
           if (result.isConfirmed) {
             window.location.href = "/addTocart/" + id;
+          }
+        });
+      }
+    </script>
+    <script>
+      function login() {
+        Swal.fire({
+          title: "Please Login!",
+          showCancelButton: false,
+          confirmButtonColor: "#000000",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "ok"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/userLogin"
           }
         });
       }
