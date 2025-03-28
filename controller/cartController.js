@@ -220,7 +220,13 @@ orderPost:async (req, res) => {
         const findOrder = await Order.findOne({ _id: orderId });
 
         if (findOrder) {
+            if( req.body.paymentMethod === "COD"){
+            const updatedOrder = await Order.findByIdAndUpdate(orderId, { paymentStatus: "Pending" }, { new: true });
+            }else{
             const updatedOrder = await Order.findByIdAndUpdate(orderId, { paymentStatus: "Paid" }, { new: true });
+
+            }
+
             
         } else {
             const userId = req.session.userID;
@@ -300,8 +306,14 @@ orderPost:async (req, res) => {
                 return res.status(400).json({ error: 'Please select a valid address' });
             }
         }
-        req.session.blockCheckout = true;
-        res.redirect('/orderConform');
+        if(req.body.paymentStatus == "Failed"){
+            req.session.blockCheckout = true;
+            res.redirect('/ordersProfile');
+        }else{
+            req.session.blockCheckout = true;
+            res.redirect('/orderConform');
+        }
+       
         
 
     } catch (err) {

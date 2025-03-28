@@ -15,12 +15,6 @@ const admin = require('../middleware/adminHandle');
 
 
 
-
-
-
-
-
-
 // admin login
 router.get("/adminLogin",adminController.adminLogin)
 router.post("/submit",adminController.adminLoginPost)

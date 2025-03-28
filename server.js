@@ -44,8 +44,6 @@ app.use(session({
   app.use('/',require('./routes/adminRoutes'))
   app.use('/',require('./routes/userRoutes'))
   
-
-
   app.listen(port,()=>{
     console.log("Listening to server http://localhost:3000");
   })

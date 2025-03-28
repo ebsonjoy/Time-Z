@@ -11,7 +11,7 @@ const wishlistController = require('../controller/wishlistController')
 const walletController = require('../controller/walletController')
 
 
-// User Login, SignUp, OTP, Resen OTP, LogOut 
+// User Login, SignUp, OTP, Resent OTP, LogOut 
 
 
 router.get("/",userController.userHomePage);
